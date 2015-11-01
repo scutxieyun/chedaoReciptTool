@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="gb2312"?>
+<AutoUpdater>
+	<description>Application autoUpdate</description>
+  	<Updater>
+		<Url>http://masterservice.51autogo.com:19080/android_version/</Url>
+		<LastUpdateTime>2015-08-31</LastUpdateTime>
+  	</Updater>
+  	<Application applicationId="GasStation">
+    		<EntryPoint>GasStation.exe</EntryPoint>
+    		<Location>.</Location>
+    		<Version>1.5.5</Version>
+  	</Application>
+  	
+  	<Files>
+	   	 <File Ver="1.5.5" Name="GasStation.exe" />
+		 <File Ver="1.5.5" Name="common.ini" />
+		 <File Ver="1.5.5" Name="discount.ini" />
+		 <File Ver="1.5.5" Name="\wav\ge.wav" />
+		 <File Ver="1.5.5" Name="\wav\anquancui.wav" />
+		 <File Ver="1.5.5" Name="\wav\baisuisan.wav" />
+		 <File Ver="1.5.5" Name="\wav\kuangquanshui.wav" />
+		 <File Ver="1.5.5" Name="\wav\lanxingbolishui.wav" />
+		 <File Ver="1.5.5" Name="\wav\nongfushanquan.wav" />
+		 <File Ver="1.5.5" Name="\wav\ping.wav" />
+		 <File Ver="1.5.5" Name="\wav\tianranshui.wav" />
+		 <File Ver="1.5.5" Name="\wav\xiang.wav" />
+		 <File Ver="1.5.5" Name="\wav\discount.wav" />
+  	</Files>
+</AutoUpdater>
