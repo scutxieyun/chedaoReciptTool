@@ -52,11 +52,11 @@ namespace CheDaoReciptHike
                     ChePActionRequest p_item = (ChePActionRequest)req;
                     this.Invoke((MethodInvoker)delegate
                     {
-                        this.MoveToDoneList(p_item.Order_Number);// run in UI thread
+                        this.MoveToDoneList(p_item.Order_Number,p_item.Printed_Time);// run in UI thread
                     });
                     break;
                 default:
-                    Trace.WriteLine("incorrect message request received " + req.message_type.ToString());
+                    Trace.WriteLineIf(Program.trace_sw.TraceError, "incorrect message request received " + req.message_type.ToString());
                     break;
             }
         }
@@ -104,11 +104,11 @@ namespace CheDaoReciptHike
         }
 
         /** just for the case: move one item to done list without print*/
-        private void MoveToDoneList(String TransNo) {
+        private void MoveToDoneList(String TransNo,String Printed_Time) {
             ListViewItem[] list_items = lsReqs.Items.Find(TransNo,false);
             if (list_items.Length > 0) {
                 lsReqs.Items.Remove(list_items[0]);
-                this.lsDone.Items.Add(list_items[0]);
+                this.lsDone.Items.Add(list_items[0]).SubItems.Add(Printed_Time);
                 this.mActList.Remove((CheRequest)list_items[0].Tag);
                 this.mDoneList.Add((CheRequest)list_items[0].Tag);
             }

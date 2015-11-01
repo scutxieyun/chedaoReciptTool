@@ -27,7 +27,7 @@ namespace CheDaoReciptHike
                    TransportType.Tcp, "", SocketPermission.AllPorts);
             mListener = new Socket(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             mListener.Bind(ipEndPoint);
-            Trace.WriteLine("bind socket to " + port.ToString());
+            Trace.WriteLineIf(Program.trace_sw.TraceInfo,"bind socket to " + port.ToString());
             mListener.Listen(2);    //only one working sessions. reserve one if current connection is hooked. 
             AsyncCallback aCallback = new AsyncCallback(AcceptCallback);
 
@@ -55,7 +55,7 @@ namespace CheDaoReciptHike
         public static ChePacket gPacketHandle = new ChePacket();
         public ClientAgent(Socket s) {
             peer = s;
-            Trace.WriteLine("new connect comming from " + peer.RemoteEndPoint.ToString());
+            Trace.TraceInformation("new connect comming from " + peer.RemoteEndPoint.ToString());
             gPacketHandle.reset();
             Program.UpdateStatus(peer.RemoteEndPoint.ToString());
         }
@@ -75,7 +75,7 @@ namespace CheDaoReciptHike
                 bytesRead = peer.EndReceive(ar);
                 if (bytesRead > 0)
                 {
-                    Trace.WriteLine("new TCP data:" + bytesRead.ToString() + " bytes");
+                    Trace.WriteLineIf(Program.trace_sw.TraceVerbose,"new TCP data:" + bytesRead.ToString() + " bytes");
                     int res_len = 0;
                     Byte[] res = gPacketHandle.handle_incomming(mBuffer, bytesRead,out res_len);
                     if (res == null) {
@@ -83,7 +83,7 @@ namespace CheDaoReciptHike
                     }
                     if (res_len == 0)
                     {
-                        Trace.WriteLine("报文处理失败");
+                        Trace.WriteLineIf(Program.trace_sw.TraceError,"报文处理失败");
                     }
                     else
                     {
@@ -94,7 +94,7 @@ namespace CheDaoReciptHike
             }
             catch (Exception e) {
                 //include the client close the connection
-                Trace.WriteLine("连接异常中断 " + peer.RemoteEndPoint.ToString() + " 错误信息" + e.ToString());
+                Trace.WriteLineIf(Program.trace_sw.TraceWarning, "连接异常中断 " + peer.RemoteEndPoint.ToString() + " 错误信息" + e.ToString());
                 this.close();
             }
 
@@ -137,7 +137,7 @@ namespace CheDaoReciptHike
                         cur_type = BitConverter.ToInt16(header_t_field, 0);
                     }
                     if (expected_byte > max_fragment || expected_byte <= 0) {//incorrect data
-                        Trace.WriteLine("报文长度错误 丢弃 " + expected_byte.ToString());
+                        Trace.WriteLineIf(Program.trace_sw.TraceError, "报文长度错误 丢弃 " + expected_byte.ToString());
                         this.reset();
                         remainder_byte = 0;
                         abort = true;

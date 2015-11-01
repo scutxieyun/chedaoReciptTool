@@ -88,7 +88,7 @@ namespace CheDaoReciptHike
                 return o;
             }
             catch (Exception e) {
-                Trace.WriteLine(" decode XML error " + e.ToString());
+                Trace.WriteLineIf(Program.trace_sw.TraceError," decode XML error " + e.ToString());
                 return null;
             }
         }
@@ -144,7 +144,7 @@ namespace CheDaoReciptHike
             }
             catch (Exception e)
             {
-                Trace.WriteLine(" decode XML error " + e.ToString());
+                Trace.WriteLineIf(Program.trace_sw.TraceError,"decode XML error " + e.ToString());
                 return null;
             }
         }
@@ -152,9 +152,14 @@ namespace CheDaoReciptHike
     public class ChePActionRequest : CheDaoInterface
     {
         String _Order_Number;
-        ChePActionRequest(String str) {
+        ChePActionRequest(String str,String printed_time) {
             this.message_type = CheDaoInterface.print_confirm;
             _Order_Number = str;
+            _Printed_Time = printed_time;
+        }
+        String _Printed_Time;
+        public String Printed_Time {
+            get { return _Printed_Time; }
         }
         public String Order_Number {
             get { return _Order_Number; }
@@ -163,8 +168,8 @@ namespace CheDaoReciptHike
         {
             return null;
         }
-        public static ChePActionRequest create(string str) {
-            return new ChePActionRequest(str);
+        public static ChePActionRequest create(string str,String printed_time) {
+            return new ChePActionRequest(str,printed_time);
         }
     }
     static public class CheDaoFactory {
@@ -176,6 +181,9 @@ namespace CheDaoReciptHike
                                      **/
         static String bk_fn = "chedao-bk.dat";
         static String active_a = "A-";
+        static int Invoice_Request_Count = 0;
+        static int Print_Request_Count = 0;
+        static int Print_Act_Count = 0;
 
         static Dictionary<String, CheRequest> mPendingList = new Dictionary<String, CheRequest>(); //dont send to UI. until the confirm message arrive.
 
@@ -209,12 +217,13 @@ namespace CheDaoReciptHike
                 restore();
             }
             catch (Exception e) {
-                Trace.WriteLine("Restore found a error " + e.ToString());
+                Trace.WriteLineIf(Program.trace_sw.TraceError,"Restore found a error " + e.ToString());
             }
         }
 
         public static string Dump() {
-            String res = "Active File bk: " + active_a + bk_fn + Environment.NewLine + "dict cache has" + mPendingList.Keys.Count.ToString();
+            String res = "Active File bk: " + active_a + bk_fn + Environment.NewLine + "dict cache has " + mPendingList.Keys.Count.ToString() + Environment.NewLine;
+            res += String.Format("Invoice Request:{0:d}  Print Request:{1:d} Print Act {2:d}", Invoice_Request_Count, Print_Request_Count, Print_Act_Count) + Environment.NewLine;
             foreach (String key in mPendingList.Keys) {
                 res += key + Environment.NewLine;
             }
@@ -229,7 +238,7 @@ namespace CheDaoReciptHike
             {
                 int msg_count = 0;
                 int discard_count = 0;
-                Trace.WriteLine("restore dumped package","info");
+                Trace.WriteLineIf(Program.trace_sw.TraceVerbose,"restore dumped package","info");
                 Boolean read_ok = false;
                 do
                 {
@@ -255,7 +264,7 @@ namespace CheDaoReciptHike
                     LocalChePackage p = new LocalChePackage(msg_type, buffer, msg_len, c_t.Ticks);
                     _HandlePackage(p);
                 } while (read_ok);
-                Trace.WriteLine(String.Format("restore done found msg {0:d} discard {1:d}",msg_count,discard_count),"info");
+                Trace.WriteLineIf(Program.trace_sw.TraceInfo,String.Format("restore done found msg {0:d} discard {1:d}",msg_count,discard_count),"info");
                 String obsolete_fn = active_a == "A-" ? "B-" : "A-";
                 rst_stream.Close();
                 try
@@ -263,7 +272,7 @@ namespace CheDaoReciptHike
                     File.Delete(obsolete_fn + bk_fn);
                 }
                 catch (Exception e) {
-                    Trace.WriteLine("delete backup file " + obsolete_fn + bk_fn + " failed","error");
+                    Trace.WriteLineIf(Program.trace_sw.TraceError,"delete backup file " + obsolete_fn + bk_fn + " failed","error");
                 }
             }
             return;
@@ -272,16 +281,19 @@ namespace CheDaoReciptHike
 
 
         static CheDaoInterface create(LocalChePackage p) {
-            Trace.WriteLine(String.Format("incomming package {0:d} {1:s}", p.msg_type, p.rawXML),"message");
+            Trace.WriteLineIf(Program.trace_sw.TraceVerbose,String.Format("incomming package {0:d} {1:s}", p.msg_type, p.rawXML),"message");
             if (p.msg_type == CheDaoInterface.data_validation)
             {
+                Invoice_Request_Count++;
                 return CheRequest.create(p.rawXML);
             }
             if (p.msg_type == CheDaoInterface.scan_print) {
+                Print_Request_Count++;
                 return ChePrintRequest.create(p.rawXML);
             }
             if (p.msg_type == CheDaoInterface.print_confirm) {
-                return ChePActionRequest.create(p.rawXML);//it is just a string
+                Print_Act_Count++;
+                return ChePActionRequest.create(p.rawXML,p.created_time);//it is just a string
             }
             return null;
         }
@@ -299,7 +311,7 @@ namespace CheDaoReciptHike
                         }
                        catch (Exception e)
                         {
-                            Trace.WriteLine("Insert CheRequest Failed, maybe the key already exist " + e.Message,"error");
+                            Trace.WriteLineIf(Program.trace_sw.TraceError,"Insert CheRequest Failed, maybe the key already exist " + e.Message,"error");
                             msg.Result = 2; //2:其它不符;
                         }
                         break;
@@ -313,7 +325,7 @@ namespace CheDaoReciptHike
                         }
                         else
                         {
-                            Trace.WriteLine("invalide print request, no key exist","error");
+                            Trace.WriteLineIf(Program.trace_sw.TraceError,"invalide print request, no key exist","error");
                             msg.Result = 2;//2:已开票;
                         }
                         break;
@@ -333,7 +345,7 @@ namespace CheDaoReciptHike
                 }
                 catch (Exception e)
                 {
-                    Trace.WriteLine("Write backup stream failed " + e.Message,"error");
+                    Trace.WriteLineIf(Program.trace_sw.TraceError,"Write backup stream failed " + e.Message,"error");
                 }
             }
             return msg;
@@ -345,7 +357,7 @@ namespace CheDaoReciptHike
             CheDaoInterface msg = _HandlePackage(p);
             if (msg != null) {
                 string rsp_msg = msg.Response();
-                Trace.WriteLine("send response: " + rsp_msg,"message");
+                Trace.WriteLineIf(Program.trace_sw.TraceVerbose,"send response: " + rsp_msg,"message");
                 byte[] body_buffer = Encoding.UTF8.GetBytes(rsp_msg);
                 MemoryStream rsp_str = new MemoryStream(body_buffer.Length + 6);
                 byte[] tmp = System.BitConverter.GetBytes((int)rsp_msg.Length);
@@ -384,14 +396,25 @@ namespace CheDaoReciptHike
                 time = _create_time;
             }
             public void save(Stream str) {
-                str.Write(BitConverter.GetBytes(body_len), 0, sizeof(int));
-                str.Write(BitConverter.GetBytes(inner_msg_type), 0, sizeof(short));
-                str.Write(BitConverter.GetBytes(time), 0, sizeof(long));
-                str.Write(msg_body, 0, body_len);
+                try
+                {
+                    str.Write(BitConverter.GetBytes(body_len), 0, sizeof(int));
+                    str.Write(BitConverter.GetBytes(inner_msg_type), 0, sizeof(short));
+                    str.Write(BitConverter.GetBytes(time), 0, sizeof(long));
+                    str.Write(msg_body, 0, body_len);
+                }
+                catch (Exception e) {
+                    Trace.WriteLineIf(Program.trace_sw.TraceError, "backup message error with " + e.Message, "error");
+                }
             }
             public String rawXML {
                 get {
                     return Encoding.UTF8.GetString(msg_body, 0, body_len);
+                }
+            }
+            public String created_time {
+                get {
+                    return new DateTime(this.time).ToString();
                 }
             }
             public short msg_type {

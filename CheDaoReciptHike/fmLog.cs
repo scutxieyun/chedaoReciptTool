@@ -42,6 +42,7 @@ namespace CheDaoReciptHike
         {
             tbLog.AppendText(CheDaoFactory.Dump() + Environment.NewLine);
             tbLog.AppendText(Win32Locator.Dump() + Environment.NewLine);
+            tbLog.AppendText(Program.log.Dump() + Environment.NewLine);
         }
 
         private void fmLog_Load(object sender, EventArgs e)
@@ -71,6 +72,7 @@ namespace CheDaoReciptHike
     }
     public class LogTrace:TextWriterTraceListener{
         System.IO.StreamWriter log_file;
+        int error_count;
         public LogTrace() {
             String fn = String.Format("log\\log-{0:d}-{1:d}-{2:d}.txt", DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day);
             log_file = new System.IO.StreamWriter(fn,true);
@@ -84,7 +86,23 @@ namespace CheDaoReciptHike
         public override void Flush()
         {
             base.Flush();
-            log_file.Flush();
+            try
+            {
+                log_file.Flush();
+            }
+            catch (Exception e) {
+                error_count++;
+                return;
+            }
         }
+        public override void Close()
+        {
+            base.Close();
+            log_file.Close();
+        }
+        public string Dump() {
+            return "Error Flush happened " + error_count.ToString();
+        }
+
     }
 }

@@ -27,7 +27,7 @@ namespace CheDaoReciptHike
 
         static String wnd_trace; // for debug use
         static public String Dump() {
-            return wnd_trace;
+            return "Latest window trace record: " + wnd_trace;
         }
         static public IntPtr locateWindow(String path)
         {
@@ -104,6 +104,9 @@ namespace CheDaoReciptHike
                 info = typeof(CheRequest).GetProperty(field);
                 next_key = _next_key;
                 field_name = field;
+                if (info == null) {
+                    Trace.WriteLineIf(Program.trace_sw.TraceError, "no field defined:" + field, "error");
+                }
             }
             string ValueToBeSent.getValue(CheRequest req)
             {
@@ -178,7 +181,7 @@ namespace CheDaoReciptHike
             anch_wnd_handle = Win32Locator.locateWindow(anch_wnd_str);
             if (tmp != anch_wnd_handle)
             {
-                Trace.WriteLine("locate " + anch_wnd_str + " at " + anch_wnd_handle.ToString());
+                Trace.WriteLineIf(Program.trace_sw.TraceInfo,"locate " + anch_wnd_str + " at " + anch_wnd_handle.ToString());
             }
             return anch_wnd_handle != IntPtr.Zero;
         }
@@ -198,7 +201,6 @@ namespace CheDaoReciptHike
                 {
                     String str = actions[i].getValue(req);
                     SendKeys.Send(str);
-                    //Trace.WriteLine(String.Format("{0:d} {1:s}", i, str));
                 }
                 return true;
             }
@@ -214,11 +216,11 @@ namespace CheDaoReciptHike
             edit_ptr = Win32Locator.locateWindow(edit_loc);
             if (edit_ptr == IntPtr.Zero)
             {
-                Trace.WriteLine("locate " + edit_loc + " failed");
+                Trace.WriteLineIf(Program.trace_sw.TraceInfo, "locate " + edit_loc + " failed");
                 return false;
             }
             else {
-                Trace.WriteLine(String.Format("locate {0:s} at {1:x}",edit_loc, edit_ptr));
+                Trace.WriteLineIf(Program.trace_sw.TraceInfo, String.Format("locate {0:s} at {1:x}",edit_loc, edit_ptr));
                 return true;
             }
 
@@ -234,11 +236,11 @@ namespace CheDaoReciptHike
                     SendMessage(edit_ptr, WM_SETTEXT, IntPtr.Zero, text);
                     int res = Marshal.GetLastWin32Error();
                     if (res != 0) {
-                        Trace.WriteLine(String.Format("sendmessage with error code:{0:d}", res));
+                        Trace.WriteLineIf(Program.trace_sw.TraceError,String.Format("sendmessage with error code:{0:d}", res),"error");
                         return false;
                     }
                 } catch (Exception e) {
-                    Trace.WriteLine("Send Text Failed with " + e.ToString());
+                    Trace.WriteLineIf(Program.trace_sw.TraceError,"Send Text Failed with " + e.ToString(),"error");
                     return false;
                 }
             }

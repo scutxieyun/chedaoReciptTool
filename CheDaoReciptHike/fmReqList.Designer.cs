@@ -49,6 +49,7 @@
             this.lbskStatus = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.cbTopMost = new System.Windows.Forms.CheckBox();
+            this.print_time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -66,10 +67,9 @@
             this.lsReqs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lsReqs.HideSelection = false;
             this.lsReqs.HoverSelection = true;
-            this.lsReqs.Location = new System.Drawing.Point(5, 5);
-            this.lsReqs.Margin = new System.Windows.Forms.Padding(2);
+            this.lsReqs.Location = new System.Drawing.Point(8, 8);
             this.lsReqs.Name = "lsReqs";
-            this.lsReqs.Size = new System.Drawing.Size(480, 335);
+            this.lsReqs.Size = new System.Drawing.Size(718, 500);
             this.lsReqs.TabIndex = 1;
             this.lsReqs.UseCompatibleStateImageBehavior = false;
             this.lsReqs.View = System.Windows.Forms.View.Details;
@@ -104,10 +104,9 @@
             // lbStatus
             // 
             this.lbStatus.AutoSize = true;
-            this.lbStatus.Location = new System.Drawing.Point(11, 397);
-            this.lbStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbStatus.Location = new System.Drawing.Point(16, 596);
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(101, 12);
+            this.lbStatus.Size = new System.Drawing.Size(152, 18);
             this.lbStatus.TabIndex = 5;
             this.lbStatus.Text = "通信状态：无连接";
             // 
@@ -115,19 +114,21 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(8, 12);
+            this.tabControl1.Location = new System.Drawing.Point(12, 18);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(499, 371);
+            this.tabControl1.Size = new System.Drawing.Size(748, 556);
             this.tabControl1.TabIndex = 6;
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.lsReqs);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 28);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(491, 345);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Size = new System.Drawing.Size(740, 524);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "待打印";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -135,10 +136,11 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.lsDone);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 28);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(491, 345);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Size = new System.Drawing.Size(740, 524);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "已打印";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -150,10 +152,12 @@
             this.done_GasPortNo,
             this.done_ClientInfo,
             this.done_license,
-            this.done1_Amount});
-            this.lsDone.Location = new System.Drawing.Point(6, 6);
+            this.done1_Amount,
+            this.print_time});
+            this.lsDone.Location = new System.Drawing.Point(9, 9);
+            this.lsDone.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lsDone.Name = "lsDone";
-            this.lsDone.Size = new System.Drawing.Size(479, 333);
+            this.lsDone.Size = new System.Drawing.Size(716, 498);
             this.lsDone.TabIndex = 0;
             this.lsDone.UseCompatibleStateImageBehavior = false;
             this.lsDone.View = System.Windows.Forms.View.Details;
@@ -190,17 +194,19 @@
             // lbskStatus
             // 
             this.lbskStatus.AutoSize = true;
-            this.lbskStatus.Location = new System.Drawing.Point(137, 397);
+            this.lbskStatus.Location = new System.Drawing.Point(206, 596);
+            this.lbskStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbskStatus.Name = "lbskStatus";
-            this.lbskStatus.Size = new System.Drawing.Size(101, 12);
+            this.lbskStatus.Size = new System.Drawing.Size(152, 18);
             this.lbskStatus.TabIndex = 7;
             this.lbskStatus.Text = "税控状态: 无连接";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(284, 389);
+            this.button1.Location = new System.Drawing.Point(426, 584);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(112, 34);
             this.button1.TabIndex = 8;
             this.button1.Text = "模拟税控";
             this.button1.UseVisualStyleBackColor = true;
@@ -209,19 +215,25 @@
             // cbTopMost
             // 
             this.cbTopMost.AutoSize = true;
-            this.cbTopMost.Location = new System.Drawing.Point(401, 393);
+            this.cbTopMost.Location = new System.Drawing.Point(602, 590);
+            this.cbTopMost.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbTopMost.Name = "cbTopMost";
-            this.cbTopMost.Size = new System.Drawing.Size(96, 16);
+            this.cbTopMost.Size = new System.Drawing.Size(135, 22);
             this.cbTopMost.TabIndex = 9;
             this.cbTopMost.Text = "保持在最前面";
             this.cbTopMost.UseVisualStyleBackColor = true;
             this.cbTopMost.CheckedChanged += new System.EventHandler(this.cbTopMost_CheckedChanged);
             // 
+            // print_time
+            // 
+            this.print_time.Text = "操作时间";
+            this.print_time.Width = 220;
+            // 
             // fmReqList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 418);
+            this.ClientSize = new System.Drawing.Size(766, 627);
             this.Controls.Add(this.cbTopMost);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lbskStatus);
@@ -229,7 +241,6 @@
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "fmReqList";
             this.Text = "车到发票辅助打印";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.fmReqList_FormClosed);
@@ -264,6 +275,7 @@
         private System.Windows.Forms.ColumnHeader done_license;
         private System.Windows.Forms.ColumnHeader done1_Amount;
         private System.Windows.Forms.CheckBox cbTopMost;
+        private System.Windows.Forms.ColumnHeader print_time;
     }
 }
 

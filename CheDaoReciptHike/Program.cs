@@ -15,8 +15,8 @@ namespace CheDaoReciptHike
     static class Program
     {
         static fmReqList mainForm = null;
-        static LogTrace log = null;
-        static List<String> debug_cat;
+        public static LogTrace log = null;
+        public static TraceSwitch trace_sw;
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -27,18 +27,17 @@ namespace CheDaoReciptHike
             Application.SetCompatibleTextRenderingDefault(false);
             try
             {
-                debug_cat = new List<String>(AppConfig.GetDebugLevel().Split(','));
+                trace_sw = new TraceSwitch("General_Log_SW", "for all trace");
                 log = new LogTrace();
-                Trace.WriteLine("start ...in " + Application.ExecutablePath);
+                Trace.WriteLineIf(trace_sw.TraceInfo,"start ...in " + Application.ExecutablePath);
                 mainForm = new fmReqList();     
                 Application.Run(mainForm);
-                Trace.WriteLine("gracefully shutdown...");
+                Trace.WriteLineIf(trace_sw.TraceInfo,"gracefully shutdown...");
                 Trace.Flush();
+                log.Close();
             }
             catch (Exception e) {
                 MessageBox.Show("系统初始化失败，请检查网络是否正常，或联系技术支持 错误信息：" + e.ToString());
-                Trace.WriteLine("exception at start: " + e.ToString());
-                Trace.Flush();
             }
         }
         public static void NewRequest(CheDaoInterface req) {
@@ -47,9 +46,6 @@ namespace CheDaoReciptHike
         }
         public static void UpdateStatus(String info) {
             mainForm.UpdateStatus(info);
-        }
-        public static Boolean DebugCategory(string category) {
-            return debug_cat.Exists(p => p == category);
         }
     }
     public static class AppConfig {
@@ -63,11 +59,11 @@ namespace CheDaoReciptHike
                 }
                 catch (Exception e) {
                     port = 3344;
-                    Trace.WriteLine("read port information error. set default port 3344");
+                    Trace.WriteLineIf(Program.trace_sw.TraceWarning,"read port information error. set default port 3344");
                 }
             }else
             {
-                Trace.WriteLine("no port found in configuration " + Application.ExecutablePath);
+                Trace.WriteLineIf(Program.trace_sw.TraceWarning, "no port found in configuration " + Application.ExecutablePath);
             }
             return port;
         }
