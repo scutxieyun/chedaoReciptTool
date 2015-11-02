@@ -75,8 +75,8 @@ namespace CheDaoReciptHike
         int error_count;
         //int smart_flush = 0;
         public LogTrace() {
-            String fn = String.Format("log\\log-{0:d}-{1:d}-{2:d}.txt", DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day);
-            log_file = new System.IO.StreamWriter(fn,true);
+            String fn = String.Format("log\\log-{0:d}-{1:d}-{2:d}.log", DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day);
+            log_file = new System.IO.StreamWriter(new FileStream(fn,FileMode.Append));
             Trace.Listeners.Clear();
             //this.Writer = log_file;
             Trace.Listeners.Add(this);
