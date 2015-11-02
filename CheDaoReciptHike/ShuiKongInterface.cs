@@ -113,7 +113,7 @@ namespace CheDaoReciptHike
                 if (info != null)
                 {
                     Object o = info.GetValue(req, null);
-                    if (o != null) return info.GetValue(req, null).ToString() + next_key;
+                    if (o != null) return o.ToString() + next_key;
                     else return next_key;
                 }
                 return "";
@@ -204,8 +204,7 @@ namespace CheDaoReciptHike
                 for (int i = 0; i < this.max_send_ops; i++)
                 {
                     String str = actions[i].getValue(req);
-                    //SendKeys.Send(str);
-                    Trace.WriteLine(str);
+                    SendKeys.Send(str);
                 }
                 return true;
             }
