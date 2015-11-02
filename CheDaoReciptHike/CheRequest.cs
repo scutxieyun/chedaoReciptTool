@@ -315,15 +315,18 @@ namespace CheDaoReciptHike
             return null;
         }
 
+        /**
+            make sure the function is re-entriable.
+        **/
         static CheDaoInterface _HandlePackage(LocalChePackage p) {
             CheDaoInterface msg = create(p);
             if (msg != null) {
                 switch(msg.message_type){
                     case CheDaoInterface.data_validation:
                         CheRequest item = (CheRequest)msg;
-                        //put to pending list
                         try
                         {
+                            //put to pending list
                             mPendingList.Add(item.Order_Number, item);
                         }
                        catch (Exception e)
@@ -347,7 +350,7 @@ namespace CheDaoReciptHike
                         }
                         break;
                     case CheDaoInterface.print_confirm:
-                        Program.NewRequest(msg);
+                        Program.NewRequest(msg); //internal message
                         break;
                     default:
                         msg = null;
@@ -368,7 +371,7 @@ namespace CheDaoReciptHike
             }
             return msg;
         }
-
+        /* handle the message from network side*/
         internal static byte[] HandlePackage(short cur_type, byte[] msg_body, int buffer_point)
         {
             LocalChePackage p = new LocalChePackage(cur_type, msg_body, buffer_point);
@@ -389,7 +392,9 @@ namespace CheDaoReciptHike
             }
             return null;
         }
-        /* the package is from GUI*/
+        /* 
+            it is a bad choice, the call is from GUI thread
+            the package is from GUI*/
         internal static void Handle_Internal_Package(short msg_type, byte[] msg_body) {
             LocalChePackage p = new LocalChePackage(msg_type, msg_body, msg_body.Length);
             _HandlePackage(p);

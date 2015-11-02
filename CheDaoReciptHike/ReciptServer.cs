@@ -53,9 +53,11 @@ namespace CheDaoReciptHike
         Socket peer = null;
         byte[] mBuffer = new byte[max_fragment - header_length];
         public static ChePacket gPacketHandle = new ChePacket();
+        String mRemoteInfo;
         public ClientAgent(Socket s) {
             peer = s;
             Trace.TraceInformation("new connect comming from " + peer.RemoteEndPoint.ToString());
+            mRemoteInfo = peer.RemoteEndPoint.ToString();
             gPacketHandle.reset();
             Program.UpdateStatus(peer.RemoteEndPoint.ToString());
         }
@@ -94,7 +96,7 @@ namespace CheDaoReciptHike
             }
             catch (Exception e) {
                 //include the client close the connection
-                Trace.WriteLineIf(Program.trace_sw.TraceWarning, "连接异常中断 " + peer.RemoteEndPoint.ToString() + " 错误信息" + e.ToString());
+                Trace.WriteLineIf(Program.trace_sw.TraceWarning, "连接异常中断 from " + mRemoteInfo + " 错误信息" + e.ToString());
                 this.close();
             }
 

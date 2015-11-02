@@ -30,6 +30,7 @@ namespace CheDaoReciptHike
         public void refresh() {
         }
         public void WriteLine(String msg) {
+
             if (this.Visible)
             {
                 this.Invoke((MethodInvoker)delegate
@@ -49,13 +50,12 @@ namespace CheDaoReciptHike
         {
             source = new fmTrace();
             source.con = this;
-            Trace.Listeners.Add(source);
             fmLog_Resize(sender, e);
         }
 
         private void fmLog_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Trace.Listeners.Remove(source);
+            if(cbRealtimeLog.Checked) Trace.Listeners.Remove(source);
         }
 
         private void fmLog_Resize(object sender, EventArgs e)
@@ -69,10 +69,19 @@ namespace CheDaoReciptHike
         {
             tbLog.Clear();
         }
+
+        private void cbRealtimeLog_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbRealtimeLog.Checked)
+            {
+                Trace.Listeners.Add(source); //the trace listener will introduce a deadlock, suppress it until a good solution.
+            }
+        }
     }
     public class LogTrace:TextWriterTraceListener{
-        System.IO.StreamWriter log_file;
+        System.IO.StreamWriter log_file = null;
         int error_count;
+        String fn;
         //int smart_flush = 0;
         public LogTrace() {
             String fn = String.Format("log\\log-{0:d}-{1:d}-{2:d}.log", DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day);
@@ -86,7 +95,7 @@ namespace CheDaoReciptHike
             //base.WriteLine(DateTime.Now.ToString() + ":" + message);
             lock (log_file)
             {
-                log_file.WriteLine(DateTime.Now.ToString() + ":" + message);
+                if(log_file != null) log_file.WriteLine(DateTime.Now.ToString() + ":" + message);
             }
         }
         public override void Flush()
@@ -100,11 +109,13 @@ namespace CheDaoReciptHike
             {
                 //base.Flush();
                 lock(log_file){
-                    log_file.Flush();
+                    if(log_file != null) log_file.Flush();
                 }
             }
             catch (Exception e) {
                 error_count++;
+                if (error_count > 10) log_file = null;
+                else  restore();
                 return;
             }
         }
@@ -115,6 +126,12 @@ namespace CheDaoReciptHike
             {
                 if(log_file != null) log_file.Close();
                 log_file = null;
+            }
+        }
+        private void restore() {
+            lock (log_file)
+            {
+                log_file = new System.IO.StreamWriter(new FileStream(fn, FileMode.Append));
             }
         }
         public string Dump() {

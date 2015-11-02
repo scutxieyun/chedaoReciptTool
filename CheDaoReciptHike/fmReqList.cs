@@ -80,8 +80,9 @@ namespace CheDaoReciptHike
             lvi.SubItems.Add(req.Customer_Text);
             lvi.SubItems.Add(req.LicenseNumber);
             lvi.SubItems.Add(req.Amount);
+            lvi.SubItems.Add(req.Time);
             lvi.Tag = req;
-            this.lsReqs.Items.Add(lvi);
+            this.lsReqs.Items.Insert(0,lvi);
             this.lsReqs.EndUpdate();
         }
 
@@ -109,15 +110,18 @@ namespace CheDaoReciptHike
             ListViewItem[] list_items = lsReqs.Items.Find(TransNo,false);
             if (list_items.Length > 0) {
                 lsReqs.Items.Remove(list_items[0]);
-                this.lsDone.Items.Add(list_items[0]).SubItems.Add(Printed_Time);
+                list_items[0].SubItems.RemoveAt(5);//remove tran_date column
+                this.lsDone.Items.Insert(0,list_items[0]).SubItems.Add(Printed_Time);
                 this.mActList.Remove((CheRequest)list_items[0].Tag);
                 this.mDoneList.Add((CheRequest)list_items[0].Tag);
+
             }
 
         }
 
         private void lsReqs_DoubleClick(object sender, EventArgs e)
         {
+            if (lsReqs.SelectedItems.Count < 1) return;
             ListViewItem act_item = lsReqs.SelectedItems[0];
             CheRequest req = (CheRequest)act_item.Tag;
             if (req != null)
@@ -166,6 +170,15 @@ namespace CheDaoReciptHike
             else {
                 this.TopMost = false;
             }
+        }
+
+        private void fmReqList_Resize(object sender, EventArgs e)
+        {
+            /*Control con = (Control)sender;
+            tcMain.Width = con.Width - 20;
+            tcMain.Height = con.Width - 20;
+            lsReqs.Width = con.Width - 20;
+            lsReqs.Height = con.Height - 40;*/
         }
     }
 }

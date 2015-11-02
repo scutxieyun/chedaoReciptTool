@@ -181,7 +181,7 @@ namespace CheDaoReciptHike
             anch_wnd_handle = Win32Locator.locateWindow(anch_wnd_str);
             if (tmp != anch_wnd_handle)
             {
-                Trace.WriteLineIf(Program.trace_sw.TraceInfo,"locate " + anch_wnd_str + " at " + anch_wnd_handle.ToString());
+                Trace.WriteLineIf(Program.trace_sw.TraceInfo,String.Format("locate {0:s} at {1:X00000}",anch_wnd_str,anch_wnd_handle));
             }
             return anch_wnd_handle != IntPtr.Zero;
         }
