@@ -1,3 +1,5 @@
 CheDaoReciptHike/bin/**
 CheDaoReciptHike/obj/**
+ReciptGen/bin/**
+ReciptGen/obj/**
 *.log
