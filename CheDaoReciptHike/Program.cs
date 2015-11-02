@@ -17,6 +17,7 @@ namespace CheDaoReciptHike
         static fmReqList mainForm = null;
         public static LogTrace log = null;
         public static TraceSwitch trace_sw;
+        public static TextWriterTraceListener st_log = null;
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -29,6 +30,9 @@ namespace CheDaoReciptHike
             {
                 trace_sw = new TraceSwitch("General_Log_SW", "for all trace");
                 log = new LogTrace();
+                //String fn = String.Format("log\\log-{0:d}-{1:d}-{2:d}.txt", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                //st_log = new TextWriterTraceListener(fn);
+                //Trace.Listeners.Add(st_log);
                 Trace.WriteLineIf(trace_sw.TraceInfo,"start ...in " + Application.ExecutablePath);
                 mainForm = new fmReqList();     
                 Application.Run(mainForm);

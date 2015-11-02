@@ -87,6 +87,7 @@ namespace CheDaoReciptHike
 
         private void fmReqList_FormClosed(object sender, FormClosedEventArgs e)
         {
+            CheDaoFactory.close();
             mNotify.Visible = false;
             mNotify.Dispose();
         }

@@ -184,6 +184,7 @@ namespace CheDaoReciptHike
         static int Invoice_Request_Count = 0;
         static int Print_Request_Count = 0;
         static int Print_Act_Count = 0;
+        static int save_error_count = 0;
 
         static Dictionary<String, CheRequest> mPendingList = new Dictionary<String, CheRequest>(); //dont send to UI. until the confirm message arrive.
 
@@ -220,13 +221,29 @@ namespace CheDaoReciptHike
                 Trace.WriteLineIf(Program.trace_sw.TraceError,"Restore found a error " + e.ToString());
             }
         }
+        public static void close() {
+            try
+            {
+                lock (bk_stream)
+                {
+                    if (bk_stream != null)
+                    {
+                        bk_stream.Close();
+                    }
+                }
+            }
+            catch (Exception e) {
+                Trace.WriteLineIf(Program.trace_sw.TraceError, "Close bk stream error with " + e.Message);
+            }
+        }
 
         public static string Dump() {
             String res = "Active File bk: " + active_a + bk_fn + Environment.NewLine + "dict cache has " + mPendingList.Keys.Count.ToString() + Environment.NewLine;
-            res += String.Format("Invoice Request:{0:d}  Print Request:{1:d} Print Act {2:d}", Invoice_Request_Count, Print_Request_Count, Print_Act_Count) + Environment.NewLine;
+            res += String.Format("Invoice Request:{0:d}  Print Request:{1:d} Print Act {2:d} save err:{3:d}", Invoice_Request_Count, Print_Request_Count, Print_Act_Count, save_error_count) + Environment.NewLine;
             foreach (String key in mPendingList.Keys) {
                 res += key + Environment.NewLine;
             }
+            
             return res;
         }
 
@@ -345,6 +362,7 @@ namespace CheDaoReciptHike
                 }
                 catch (Exception e)
                 {
+                    save_error_count++;
                     Trace.WriteLineIf(Program.trace_sw.TraceError,"Write backup stream failed " + e.Message,"error");
                 }
             }
@@ -396,16 +414,10 @@ namespace CheDaoReciptHike
                 time = _create_time;
             }
             public void save(Stream str) {
-                try
-                {
-                    str.Write(BitConverter.GetBytes(body_len), 0, sizeof(int));
-                    str.Write(BitConverter.GetBytes(inner_msg_type), 0, sizeof(short));
-                    str.Write(BitConverter.GetBytes(time), 0, sizeof(long));
-                    str.Write(msg_body, 0, body_len);
-                }
-                catch (Exception e) {
-                    Trace.WriteLineIf(Program.trace_sw.TraceError, "backup message error with " + e.Message, "error");
-                }
+                str.Write(BitConverter.GetBytes(body_len), 0, sizeof(int));
+                str.Write(BitConverter.GetBytes(inner_msg_type), 0, sizeof(short));
+                str.Write(BitConverter.GetBytes(time), 0, sizeof(long));
+                str.Write(msg_body, 0, body_len);
             }
             public String rawXML {
                 get {

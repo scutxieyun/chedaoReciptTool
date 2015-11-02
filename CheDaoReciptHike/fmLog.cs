@@ -73,22 +73,35 @@ namespace CheDaoReciptHike
     public class LogTrace:TextWriterTraceListener{
         System.IO.StreamWriter log_file;
         int error_count;
+        //int smart_flush = 0;
         public LogTrace() {
             String fn = String.Format("log\\log-{0:d}-{1:d}-{2:d}.txt", DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day);
             log_file = new System.IO.StreamWriter(fn,true);
+            Trace.Listeners.Clear();
+            //this.Writer = log_file;
             Trace.Listeners.Add(this);
         }
         public override void WriteLine(string message)
         {
-            base.WriteLine(message);
-            log_file.WriteLine(DateTime.Now.ToString() + ":" + message);
+            //base.WriteLine(DateTime.Now.ToString() + ":" + message);
+            lock (log_file)
+            {
+                log_file.WriteLine(DateTime.Now.ToString() + ":" + message);
+            }
         }
         public override void Flush()
         {
-            base.Flush();
+            /*smart_flush++;
+            if (smart_flush < 10) {
+                return;
+            }
+            smart_flush = 0;*/
             try
             {
-                log_file.Flush();
+                //base.Flush();
+                lock(log_file){
+                    log_file.Flush();
+                }
             }
             catch (Exception e) {
                 error_count++;
@@ -97,8 +110,12 @@ namespace CheDaoReciptHike
         }
         public override void Close()
         {
-            base.Close();
-            log_file.Close();
+            //base.Close();
+            lock (log_file)
+            {
+                if(log_file != null) log_file.Close();
+                log_file = null;
+            }
         }
         public string Dump() {
             return "Error Flush happened " + error_count.ToString();
