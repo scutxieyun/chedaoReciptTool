@@ -42,8 +42,11 @@ namespace ReciptGen
             req.Print_Number = "PR" + order_no;
             req.Product_Code = "94";
             req.Product_Price = "4.5";
+            req.Product_Number = "10";
             req.Customer_Text = "中国石化";
             req.Amount = "100";
+            req.LicenseNumber = "粤AXX434";
+            req.Time = DateTime.Now.ToString();
             req.Pump_Numer = "3";
             ChePrintRequest p_req = new ChePrintRequest();
             p_req.Order_Number = order_no;

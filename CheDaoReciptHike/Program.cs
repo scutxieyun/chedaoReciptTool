@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Reflection;
+using System.Configuration;
 
 namespace CheDaoReciptHike
 {
@@ -78,6 +79,15 @@ namespace CheDaoReciptHike
             }
             return str;
         }
-        
+
+        internal static string GetVersion()
+        {
+            const String version = "v1.0";
+            if (ConfigurationManager.AppSettings["user_info"] != null) {
+                return version + " for " + ConfigurationManager.AppSettings["user_info"];
+            }
+            return version;
+
+        }
     }
 }

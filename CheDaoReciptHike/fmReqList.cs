@@ -76,7 +76,11 @@ namespace CheDaoReciptHike
             lvi.Name = req.Order_Number;    /** it is key to search the item*/
             //lvi.ImageIndex = i;     //todo
             //lvi.Text = req.Order_Number;
-            lvi.SubItems.Add(req.Pump_Numer + " " + req.Product_Code);
+            String brief_info = req.Pump_Numer + " " + req.Product_Code;
+            if (req.Product_Number != null && req.Product_Number != "") {
+                brief_info += " " + req.Product_Number + "升";
+            }
+            lvi.SubItems.Add(brief_info);
             lvi.SubItems.Add(req.Customer_Text);
             lvi.SubItems.Add(req.LicenseNumber);
             lvi.SubItems.Add(req.Amount);
@@ -142,7 +146,8 @@ namespace CheDaoReciptHike
         **/
         private void fmReqList_Load(object sender, EventArgs e)
         {
-            CheDaoFactory.init(); 
+            CheDaoFactory.init();
+            this.Text += " " + AppConfig.GetVersion();
             new ReciptServer().start(AppConfig.GetPort());
         }
 
@@ -179,6 +184,14 @@ namespace CheDaoReciptHike
             tcMain.Height = con.Width - 20;
             lsReqs.Width = con.Width - 20;
             lsReqs.Height = con.Height - 40;*/
+        }
+
+        private void lsReqs_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                lsReqs_DoubleClick(sender, e);
+            }
         }
     }
 }
