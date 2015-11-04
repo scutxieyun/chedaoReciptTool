@@ -72,19 +72,18 @@ namespace CheDaoReciptHike
         private void _AddRequest(CheRequest req) {
             mActList.Add(req);
             lsReqs.BeginUpdate();
-            ListViewItem lvi = new ListViewItem(new String[] { req.Order_Number});
+            DateTime tran_date;
+            if (DateTime.TryParse(req.Time,out tran_date) == false) {
+                tran_date = DateTime.Now;
+            }
+            ListViewItem lvi = new ListViewItem(new String[] { tran_date.ToShortTimeString()});
             lvi.Name = req.Order_Number;    /** it is key to search the item*/
             //lvi.ImageIndex = i;     //todo
             //lvi.Text = req.Order_Number;
-            String brief_info = req.Pump_Numer + " " + req.Product_Code;
-            if (req.Product_Number != null && req.Product_Number != "") {
-                brief_info += " " + req.Product_Number + "升";
-            }
+            String brief_info = String.Format("{0:s} 油枪{1:s}加{2:s}油{3:s}升", req.LicenseNumber, req.Pump_Numer, req.Product_Code, req.Product_Number);
             lvi.SubItems.Add(brief_info);
             lvi.SubItems.Add(req.Customer_Text);
-            lvi.SubItems.Add(req.LicenseNumber);
             lvi.SubItems.Add(req.Amount);
-            lvi.SubItems.Add(req.Time);
             lvi.Tag = req;
             this.lsReqs.Items.Insert(0,lvi);
             this.lsReqs.EndUpdate();
@@ -114,7 +113,6 @@ namespace CheDaoReciptHike
             ListViewItem[] list_items = lsReqs.Items.Find(TransNo,false);
             if (list_items.Length > 0) {
                 lsReqs.Items.Remove(list_items[0]);
-                list_items[0].SubItems.RemoveAt(5);//remove tran_date column
                 this.lsDone.Items.Insert(0,list_items[0]).SubItems.Add(Printed_Time);
                 this.mActList.Remove((CheRequest)list_items[0].Tag);
                 this.mDoneList.Add((CheRequest)list_items[0].Tag);
@@ -147,8 +145,17 @@ namespace CheDaoReciptHike
         private void fmReqList_Load(object sender, EventArgs e)
         {
             CheDaoFactory.init();
+            layoutMainContent();
             this.Text += " " + AppConfig.GetVersion();
+            if (AppConfig.GetBanner() == null)
+            {
+                this.plBanner.Visible = false;
+            }
+            else {
+                this.lbBanner.Text = AppConfig.GetBanner();
+            }
             new ReciptServer().start(AppConfig.GetPort());
+            layoutMainContent();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -163,6 +170,11 @@ namespace CheDaoReciptHike
             if (e.KeyCode == Keys.F12) {
                 if (log.IsDisposed) { log = new fmLog(); }
                 log.Show();
+            }
+            if (e.KeyCode == Keys.F11) {
+                Process process = new Process();
+                process.StartInfo.FileName = "notepad.exe";
+                process.Start();
             }
         }
 
@@ -192,6 +204,19 @@ namespace CheDaoReciptHike
             {
                 lsReqs_DoubleClick(sender, e);
             }
+        }
+        private void layoutMainContent() {
+            if (plBanner.Visible)
+                plBanner.Width = this.flMain.Width;
+            if (!plBanner.Visible) tcMain.Height = flMain.Height - plInfo.Height - 30;
+            else tcMain.Height = flMain.Height - plInfo.Height - this.plBanner.Height - 30;
+            //tcMain.Width = this.flMain.Width;
+            //plInfo.Width = this.flMain.Width;
+        }
+
+        private void flMain_Resize(object sender, EventArgs e)
+        {
+            layoutMainContent();
         }
     }
 }

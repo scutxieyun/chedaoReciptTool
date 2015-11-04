@@ -76,13 +76,13 @@ namespace ReciptGen
 
         private void tmInvoice_Tick(object sender, EventArgs e)
         {
-            mConnect.Send(GenInvoicePackage());
+            if(mConnect.Connected) mConnect.Send(GenInvoicePackage());
         }
 
         private void tmPrint_Tick(object sender, EventArgs e)
         {
             if (InvoiceList.Count > 0) {
-                mConnect.Send(InvoiceList[0]);
+                if(mConnect.Connected) mConnect.Send(InvoiceList[0]);
                 InvoiceList.RemoveAt(0);
             }
         }

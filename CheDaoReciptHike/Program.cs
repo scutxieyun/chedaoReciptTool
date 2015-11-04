@@ -87,7 +87,9 @@ namespace CheDaoReciptHike
                 return version + " for " + ConfigurationManager.AppSettings["user_info"];
             }
             return version;
-
+        }
+        internal static string GetBanner() {
+            return ConfigurationManager.AppSettings["banner"];
         }
     }
 }

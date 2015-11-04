@@ -2,4 +2,12 @@ CheDaoReciptHike/bin/**
 CheDaoReciptHike/obj/**
 ReciptGen/bin/**
 ReciptGen/obj/**
+AutoUpdater/obj/**
+AutoUpdater/bin/**
+AutoUpdate/obj/**
+AutoUpdate/bin/**
+CheDaoLoader/bin/**
+CheDaoLoader/obj/**
+bin/*.pdb
+bin/*.vshost.*
 *.log
