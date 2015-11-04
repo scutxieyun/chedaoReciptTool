@@ -187,7 +187,7 @@ namespace CheDaoReciptHike
         static int save_error_count = 0;
 
         static Dictionary<String, CheRequest> mPendingList = new Dictionary<String, CheRequest>(); //dont send to UI. until the confirm message arrive.
-
+        
         public static void init() {
             try
             {

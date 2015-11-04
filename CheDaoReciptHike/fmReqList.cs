@@ -70,6 +70,8 @@ namespace CheDaoReciptHike
             lbStatus.Text = "通信状态：" + info;
         }
         private void _AddRequest(CheRequest req) {
+            if (mActList.Count == 0)
+                this.Refresh(); 
             mActList.Add(req);
             lsReqs.BeginUpdate();
             DateTime tran_date;
@@ -217,6 +219,20 @@ namespace CheDaoReciptHike
         private void flMain_Resize(object sender, EventArgs e)
         {
             layoutMainContent();
+        }
+
+        private void tcMain_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index == 0) {
+                if (mActList.Count > 0) {
+                    e.Graphics.FillRectangle(new SolidBrush(Color.Red), e.Bounds);
+                }
+            }
+            // Then draw the current tab button text 
+            Rectangle paddedBounds = e.Bounds;
+            paddedBounds.Inflate(-2, -2);
+            e.Graphics.DrawString(tcMain.TabPages[e.Index].Text, this.Font, SystemBrushes.MenuText, paddedBounds);
+
         }
     }
 }
