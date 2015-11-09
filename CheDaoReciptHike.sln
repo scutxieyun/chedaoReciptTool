@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReciptGen", "ReciptGen\ReciptGen.csproj", "{15E1673C-1B43-4FA9-8D6E-ABC8519E4A8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheDaoLoader", "CheDaoLoader\CheDaoLoader.csproj", "{02FEB5AC-F817-4AD5-8660-FF34323C2AE7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4C223DBF-74B3-4243-94C9-A681136E7959} = {4C223DBF-74B3-4243-94C9-A681136E7959}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoUpdate", "AutoUpdate\AutoUpdate.csproj", "{300DF611-E6A4-447F-86CB-FD409C50CE8A}"
 EndProject

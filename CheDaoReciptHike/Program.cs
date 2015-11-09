@@ -42,7 +42,8 @@ namespace CheDaoReciptHike
                 log.Close();
             }
             catch (Exception e) {
-                MessageBox.Show("系统初始化失败，请检查网络是否正常，或联系技术支持 错误信息：" + e.ToString());
+                MessageBox.Show("系统失败，我们将试图修复，如果修复失败，请联系技术支持 错误信息：" + e.ToString());
+                Environment.ExitCode = -1; //
             }
         }
         public static void NewRequest(CheDaoInterface req) {

@@ -18,7 +18,6 @@ namespace CheDaoReciptHike
     {
         fmLog log;
         int idx = 0;
-        NotifyIcon mNotify;
         //ShuiKongInterface mShuiKongHandle = new YiYeShuiKong();
         ShuiKongInterface mSendKeyHandle = new SendKeyShuiKong();
         List<CheRequest> mActList = new List<CheRequest>();     //the transaction which is required the recipt
@@ -26,15 +25,12 @@ namespace CheDaoReciptHike
         public fmReqList()
         {
             log = new fmLog();
-            mNotify = new NotifyIcon();
-            mNotify.Icon = Resources.trayIcon;
-            mNotify.Text = "车道加油辅助";
-            mNotify.Visible = true;
             this.AddOwnedForm(log);
             InitializeComponent();
             if (mSendKeyHandle.DetectShuiKong() == true) {
                 this.lbskStatus.Text = "税控状态:连接中";
             }
+            
         }
 
         
@@ -94,8 +90,6 @@ namespace CheDaoReciptHike
         private void fmReqList_FormClosed(object sender, FormClosedEventArgs e)
         {
             CheDaoFactory.close();
-            mNotify.Visible = false;
-            mNotify.Dispose();
         }
 
         private void timer_1min_Tick(object sender, EventArgs e)
@@ -108,6 +102,7 @@ namespace CheDaoReciptHike
             {
                 this.lbskStatus.Text = "税控状态:无连接";
             }
+
         }
 
         /** just for the case: move one item to done list without print*/
