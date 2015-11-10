@@ -18,6 +18,28 @@ namespace CheDaoReciptHike
         Boolean DetectShuiKong();
         Boolean SendRecipt(CheRequest req);
         String GetPattern(int target);
+
+    }
+
+    public static class ShuiKongFactory {
+        static ShuiKongInterface mInterface = null;
+        public static void init(){
+            String shuikong_name = ConfigurationManager.AppSettings["shuikong_interface"];
+            if (shuikong_name == null) shuikong_name = "CheDaoReciptHike.SendKeyShuiKong";
+            mInterface = (ShuiKongInterface) Activator.CreateInstance(TypeInfo.GetType(shuikong_name));
+        }
+        public static Boolean DetectShuiKong() {
+            if (mInterface != null) return mInterface.DetectShuiKong();
+            return false;
+        }
+        public static Boolean SendRecipt(CheRequest req) {
+            if (mInterface != null) return mInterface.SendRecipt(req);
+            return false;
+        }
+        public static String GetPattern(int target) {
+            if (mInterface != null) return mInterface.GetPattern(target);
+            return "Not defined";
+        }
     }
     class Win32Locator {
         [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
@@ -226,6 +248,82 @@ namespace CheDaoReciptHike
             return false;
         }
     }
+
+
+    class SndMsgShuiKong : ShuiKongInterface
+    {
+
+        Dictionary<String, PropertyInfo> mFieldMap = new Dictionary<String, PropertyInfo>();
+        String mFirstWnd = null;
+        public SndMsgShuiKong()
+        {
+            Object o = ConfigurationManager.GetSection("shuikong_field_maps");
+            NameValueCollection cfg = (NameValueCollection)o;
+            foreach (String wnd_str in cfg.Keys) {
+                PropertyInfo info = typeof(CheRequest).GetProperty(cfg[wnd_str]);
+                if (info != null) {
+                    mFieldMap.Add(wnd_str, info);
+                    if (mFirstWnd == null) mFirstWnd = wnd_str; 
+                }
+            }
+        }
+        public bool DetectShuiKong()
+        {
+            IntPtr tmp = Win32Locator.locateWindow(mFirstWnd);
+            //if (tmp != anch_wnd_handle)
+            {
+                //Trace.WriteLineIf(Program.trace_sw.TraceInfo,String.Format("locate {0:s} at {1:X00000}",anch_wnd_str,anch_wnd_handle));
+            }
+            Trace.WriteLineIf(Program.trace_sw.TraceInfo, String.Format("locate {0:s} at {1:X00000}", mFirstWnd, tmp));
+            return tmp != IntPtr.Zero;
+        }
+
+        public string GetPattern(int target)
+        {
+            return mFirstWnd;
+        }
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern Boolean SetForegroundWindow(IntPtr hwnd);
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, string lParam);
+        public const uint WM_SETTEXT = 0x000C;
+        public bool SendRecipt(CheRequest req)
+        {
+            Boolean res = false;
+            Boolean firstitem = true;
+
+            foreach (String wnd_str in mFieldMap.Keys) {
+                res = false;
+                if (wnd_str != null) {
+                    IntPtr wnd_ptr = Win32Locator.locateWindow(wnd_str);
+                    if (wnd_ptr == null) break;
+                    if (firstitem) SetForegroundWindow(wnd_ptr);
+                    firstitem = false;
+                    String text = mFieldMap[wnd_str].GetValue(req, null).ToString();
+                    try
+                    {
+
+                        SendMessage(wnd_ptr, WM_SETTEXT, IntPtr.Zero, text);
+                        int r = Marshal.GetLastWin32Error();
+                        if (r != 0)
+                        {
+                            Trace.WriteLineIf(Program.trace_sw.TraceError, String.Format("sendmessage with error code:{0:d}", res), "error");
+                            break;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.WriteLineIf(Program.trace_sw.TraceError, "Send Text Failed with " + e.ToString(), "error");
+                        break;
+                    }
+                }
+                res = true;
+            }
+            return res;
+        }
+    }
+
+    //obsoleted
     class YiYeShuiKong:ShuiKongInterface{
         //static String edit_loc = "S((亿业)网络发票及管理系统)[0]/T(TPanel)[0]/T(TPanel)[0]/T(TF_write_jhd)[0]/T(TPageControl)[0]/S(发票明细)[0]/T(TPanel)[3]/T(TwwDBLookupCombo)[0]";
         static String edit_loc = "S((亿业)网络发票及管理系统)[0]";

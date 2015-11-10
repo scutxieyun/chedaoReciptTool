@@ -18,8 +18,6 @@ namespace CheDaoReciptHike
     {
         fmLog log;
         int idx = 0;
-        //ShuiKongInterface mShuiKongHandle = new YiYeShuiKong();
-        ShuiKongInterface mSendKeyHandle = new SendKeyShuiKong();
         List<CheRequest> mActList = new List<CheRequest>();     //the transaction which is required the recipt
         List<CheRequest> mDoneList = new List<CheRequest>();    //the print is done
         int m60mCounter = 0;
@@ -28,7 +26,8 @@ namespace CheDaoReciptHike
             log = new fmLog();
             this.AddOwnedForm(log);
             InitializeComponent();
-            if (mSendKeyHandle.DetectShuiKong() == true) {
+            ShuiKongFactory.init();
+            if (ShuiKongFactory.DetectShuiKong() == true) {
                 this.lbskStatus.Text = "税控状态:连接中";
             }
             
@@ -105,7 +104,7 @@ namespace CheDaoReciptHike
         private void timer_1min_Tick(object sender, EventArgs e)
         {
 
-            if (mSendKeyHandle.DetectShuiKong() == true)
+            if (ShuiKongFactory.DetectShuiKong() == true)
             {
                 this.lbskStatus.Text = "税控状态:连接中";
             }
@@ -144,11 +143,11 @@ namespace CheDaoReciptHike
             CheRequest req = (CheRequest)act_item.Tag;
             if (req != null)
             {
-                if (mSendKeyHandle.DetectShuiKong() == true)
+                if (ShuiKongFactory.DetectShuiKong() == true)
                 {
                     try
                     {
-                        if (mSendKeyHandle.SendRecipt(req) == true)
+                        if (ShuiKongFactory.SendRecipt(req) == true)
                             CheDaoFactory.Handle_Internal_Package(CheDaoInterface.print_confirm, Encoding.UTF8.GetBytes(req.Order_Number));
                     }
                     catch (Exception ex) {
@@ -260,10 +259,10 @@ namespace CheDaoReciptHike
             CheRequest req = (CheRequest)act_item.Tag;
             if (req != null)
             {
-                if (mSendKeyHandle.DetectShuiKong() == true)
+                if (ShuiKongFactory.DetectShuiKong() == true)
                 {
                     if (MessageBox.Show("重新打印已打印记录", "重新打印", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
-                    mSendKeyHandle.SendRecipt(req);
+                    ShuiKongFactory.SendRecipt(req);
                 }
                 else
                 {
