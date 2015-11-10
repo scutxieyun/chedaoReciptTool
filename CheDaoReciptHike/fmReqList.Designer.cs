@@ -34,6 +34,12 @@
             this.GasPortNo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ClientInfo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Amount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cmList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsItemPrint = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsItemDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsItemCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsItemCopyClient = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsItemCopyLicense = new System.Windows.Forms.ToolStripMenuItem();
             this.lbStatus = new System.Windows.Forms.Label();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -51,6 +57,7 @@
             this.flMain = new System.Windows.Forms.FlowLayoutPanel();
             this.plBanner = new System.Windows.Forms.Panel();
             this.lbBanner = new System.Windows.Forms.Label();
+            this.cmList.SuspendLayout();
             this.tcMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -69,14 +76,14 @@
             this.GasPortNo,
             this.ClientInfo,
             this.Amount});
+            this.lsReqs.ContextMenuStrip = this.cmList;
             this.lsReqs.FullRowSelect = true;
             this.lsReqs.HideSelection = false;
             this.lsReqs.HoverSelection = true;
-            this.lsReqs.Location = new System.Drawing.Point(5, 5);
-            this.lsReqs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lsReqs.Location = new System.Drawing.Point(8, 8);
             this.lsReqs.MultiSelect = false;
             this.lsReqs.Name = "lsReqs";
-            this.lsReqs.Size = new System.Drawing.Size(609, 262);
+            this.lsReqs.Size = new System.Drawing.Size(914, 391);
             this.lsReqs.TabIndex = 1;
             this.lsReqs.UseCompatibleStateImageBehavior = false;
             this.lsReqs.View = System.Windows.Forms.View.Details;
@@ -103,13 +110,59 @@
             this.Amount.Text = "金额";
             this.Amount.Width = 62;
             // 
+            // cmList
+            // 
+            this.cmList.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.cmList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsItemPrint,
+            this.tsItemDelete,
+            this.tsItemCopy});
+            this.cmList.Name = "cmList";
+            this.cmList.Size = new System.Drawing.Size(220, 127);
+            // 
+            // tsItemPrint
+            // 
+            this.tsItemPrint.Name = "tsItemPrint";
+            this.tsItemPrint.Size = new System.Drawing.Size(219, 30);
+            this.tsItemPrint.Text = "推送到税控系统";
+            this.tsItemPrint.Click += new System.EventHandler(this.tsItemPrint_Click);
+            // 
+            // tsItemDelete
+            // 
+            this.tsItemDelete.Name = "tsItemDelete";
+            this.tsItemDelete.Size = new System.Drawing.Size(219, 30);
+            this.tsItemDelete.Text = "删除";
+            this.tsItemDelete.Click += new System.EventHandler(this.tsItemDelete_Click);
+            // 
+            // tsItemCopy
+            // 
+            this.tsItemCopy.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsItemCopyClient,
+            this.tsItemCopyLicense});
+            this.tsItemCopy.Name = "tsItemCopy";
+            this.tsItemCopy.Size = new System.Drawing.Size(219, 30);
+            this.tsItemCopy.Text = "拷贝";
+            // 
+            // tsItemCopyClient
+            // 
+            this.tsItemCopyClient.Name = "tsItemCopyClient";
+            this.tsItemCopyClient.Size = new System.Drawing.Size(211, 30);
+            this.tsItemCopyClient.Text = "客户";
+            this.tsItemCopyClient.Click += new System.EventHandler(this.tsItemCopyClient_Click);
+            // 
+            // tsItemCopyLicense
+            // 
+            this.tsItemCopyLicense.Name = "tsItemCopyLicense";
+            this.tsItemCopyLicense.Size = new System.Drawing.Size(211, 30);
+            this.tsItemCopyLicense.Text = "车牌";
+            this.tsItemCopyLicense.Click += new System.EventHandler(this.tsItemCopyLicense_Click);
+            // 
             // lbStatus
             // 
             this.lbStatus.AutoSize = true;
-            this.lbStatus.Location = new System.Drawing.Point(7, 7);
-            this.lbStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbStatus.Location = new System.Drawing.Point(10, 10);
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(101, 12);
+            this.lbStatus.Size = new System.Drawing.Size(152, 18);
             this.lbStatus.TabIndex = 5;
             this.lbStatus.Text = "通信状态：无连接";
             // 
@@ -120,10 +173,11 @@
             this.tcMain.Controls.Add(this.tabPage1);
             this.tcMain.Controls.Add(this.tabPage2);
             this.tcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tcMain.Location = new System.Drawing.Point(3, 74);
+            this.tcMain.Location = new System.Drawing.Point(4, 110);
+            this.tcMain.Margin = new System.Windows.Forms.Padding(4);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(623, 291);
+            this.tcMain.Size = new System.Drawing.Size(936, 436);
             this.tcMain.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tcMain.TabIndex = 6;
             this.tcMain.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tcMain_DrawItem);
@@ -132,20 +186,22 @@
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
             this.tabPage1.Controls.Add(this.lsReqs);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 28);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage1.Size = new System.Drawing.Size(615, 265);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage1.Size = new System.Drawing.Size(928, 404);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "待打印";
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.lsDone);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 28);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage2.Size = new System.Drawing.Size(615, 265);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage2.Size = new System.Drawing.Size(928, 404);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "已打印";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -164,13 +220,15 @@
             this.print_time});
             this.lsDone.FullRowSelect = true;
             this.lsDone.GridLines = true;
-            this.lsDone.Location = new System.Drawing.Point(7, 3);
+            this.lsDone.Location = new System.Drawing.Point(10, 4);
+            this.lsDone.Margin = new System.Windows.Forms.Padding(4);
             this.lsDone.MultiSelect = false;
             this.lsDone.Name = "lsDone";
-            this.lsDone.Size = new System.Drawing.Size(607, 257);
+            this.lsDone.Size = new System.Drawing.Size(910, 384);
             this.lsDone.TabIndex = 0;
             this.lsDone.UseCompatibleStateImageBehavior = false;
             this.lsDone.View = System.Windows.Forms.View.Details;
+            this.lsDone.DoubleClick += new System.EventHandler(this.lsDone_DoubleClick);
             // 
             // done_tran_time
             // 
@@ -206,18 +264,20 @@
             // lbskStatus
             // 
             this.lbskStatus.AutoSize = true;
-            this.lbskStatus.Location = new System.Drawing.Point(155, 7);
+            this.lbskStatus.Location = new System.Drawing.Point(232, 10);
+            this.lbskStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbskStatus.Name = "lbskStatus";
-            this.lbskStatus.Size = new System.Drawing.Size(101, 12);
+            this.lbskStatus.Size = new System.Drawing.Size(152, 18);
             this.lbskStatus.TabIndex = 7;
             this.lbskStatus.Text = "税控状态: 无连接";
             // 
             // cbTopMost
             // 
             this.cbTopMost.AutoSize = true;
-            this.cbTopMost.Location = new System.Drawing.Point(297, 7);
+            this.cbTopMost.Location = new System.Drawing.Point(446, 10);
+            this.cbTopMost.Margin = new System.Windows.Forms.Padding(4);
             this.cbTopMost.Name = "cbTopMost";
-            this.cbTopMost.Size = new System.Drawing.Size(96, 16);
+            this.cbTopMost.Size = new System.Drawing.Size(142, 22);
             this.cbTopMost.TabIndex = 9;
             this.cbTopMost.Text = "保持在最前面";
             this.cbTopMost.UseVisualStyleBackColor = true;
@@ -231,9 +291,10 @@
             this.plInfo.Controls.Add(this.cbTopMost);
             this.plInfo.Controls.Add(this.lbStatus);
             this.plInfo.Controls.Add(this.lbskStatus);
-            this.plInfo.Location = new System.Drawing.Point(3, 371);
+            this.plInfo.Location = new System.Drawing.Point(4, 554);
+            this.plInfo.Margin = new System.Windows.Forms.Padding(4);
             this.plInfo.Name = "plInfo";
-            this.plInfo.Size = new System.Drawing.Size(623, 29);
+            this.plInfo.Size = new System.Drawing.Size(936, 44);
             this.plInfo.TabIndex = 7;
             // 
             // flMain
@@ -245,20 +306,18 @@
             this.flMain.Controls.Add(this.tcMain);
             this.flMain.Controls.Add(this.plInfo);
             this.flMain.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flMain.Location = new System.Drawing.Point(8, 8);
-            this.flMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flMain.Location = new System.Drawing.Point(12, 12);
             this.flMain.Name = "flMain";
-            this.flMain.Size = new System.Drawing.Size(637, 404);
+            this.flMain.Size = new System.Drawing.Size(956, 606);
             this.flMain.TabIndex = 8;
             this.flMain.Resize += new System.EventHandler(this.flMain_Resize);
             // 
             // plBanner
             // 
             this.plBanner.Controls.Add(this.lbBanner);
-            this.plBanner.Location = new System.Drawing.Point(2, 2);
-            this.plBanner.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plBanner.Location = new System.Drawing.Point(3, 3);
             this.plBanner.Name = "plBanner";
-            this.plBanner.Size = new System.Drawing.Size(625, 67);
+            this.plBanner.Size = new System.Drawing.Size(938, 100);
             this.plBanner.TabIndex = 8;
             // 
             // lbBanner
@@ -266,21 +325,19 @@
             this.lbBanner.AutoSize = true;
             this.lbBanner.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbBanner.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.lbBanner.Location = new System.Drawing.Point(8, 23);
-            this.lbBanner.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbBanner.Location = new System.Drawing.Point(12, 34);
             this.lbBanner.Name = "lbBanner";
-            this.lbBanner.Size = new System.Drawing.Size(82, 24);
+            this.lbBanner.Size = new System.Drawing.Size(123, 36);
             this.lbBanner.TabIndex = 0;
             this.lbBanner.Text = "label1";
             // 
             // fmReqList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(646, 420);
+            this.ClientSize = new System.Drawing.Size(969, 630);
             this.Controls.Add(this.flMain);
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "fmReqList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "车到发票辅助打印";
@@ -288,6 +345,7 @@
             this.Load += new System.EventHandler(this.fmReqList_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fmReqList_KeyDown);
             this.Resize += new System.EventHandler(this.fmReqList_Resize);
+            this.cmList.ResumeLayout(false);
             this.tcMain.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -323,6 +381,12 @@
         private System.Windows.Forms.Panel plBanner;
         private System.Windows.Forms.Label lbBanner;
         private System.Windows.Forms.ColumnHeader tran_time;
+        private System.Windows.Forms.ContextMenuStrip cmList;
+        private System.Windows.Forms.ToolStripMenuItem tsItemPrint;
+        private System.Windows.Forms.ToolStripMenuItem tsItemDelete;
+        private System.Windows.Forms.ToolStripMenuItem tsItemCopy;
+        private System.Windows.Forms.ToolStripMenuItem tsItemCopyClient;
+        private System.Windows.Forms.ToolStripMenuItem tsItemCopyLicense;
     }
 }
 

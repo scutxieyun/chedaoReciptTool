@@ -87,6 +87,7 @@ namespace CheDaoReciptHike
     class SendKeyShuiKong : ShuiKongInterface
     {
         String anch_wnd_str = null;
+        String first_editor_wnd_str = null;
         IntPtr anch_wnd_handle = IntPtr.Zero;
         int max_send_ops;
         String next_key = "{ENTER}";
@@ -163,6 +164,7 @@ namespace CheDaoReciptHike
             Object o = ConfigurationManager.GetSection("shuikong_layout_cfg");
             NameValueCollection cfg = (NameValueCollection)o;
             anch_wnd_str = cfg["shuikong_wnd_path"];
+            this.first_editor_wnd_str = cfg["first_focus"];
             if (cfg["next_key"] != null) { next_key = cfg["next_key"]; }
             try
             {
@@ -183,10 +185,11 @@ namespace CheDaoReciptHike
         {
             IntPtr tmp = anch_wnd_handle;
             anch_wnd_handle = Win32Locator.locateWindow(anch_wnd_str);
-            if (tmp != anch_wnd_handle)
+            //if (tmp != anch_wnd_handle)
             {
-                Trace.WriteLineIf(Program.trace_sw.TraceInfo,String.Format("locate {0:s} at {1:X00000}",anch_wnd_str,anch_wnd_handle));
+                //Trace.WriteLineIf(Program.trace_sw.TraceInfo,String.Format("locate {0:s} at {1:X00000}",anch_wnd_str,anch_wnd_handle));
             }
+            Trace.WriteLineIf(Program.trace_sw.TraceInfo, String.Format("locate {0:s} at {1:X00000}", anch_wnd_str, anch_wnd_handle));
             return anch_wnd_handle != IntPtr.Zero;
         }
 
@@ -196,15 +199,27 @@ namespace CheDaoReciptHike
         }
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         internal static extern Boolean SetForegroundWindow(IntPtr hwnd);
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern IntPtr SetFocus(IntPtr hwnd);
         bool ShuiKongInterface.SendRecipt(CheRequest req)
         {
             if (anch_wnd_handle != IntPtr.Zero)
             {
                 SetForegroundWindow(anch_wnd_handle);
+                if (this.first_editor_wnd_str != null) {
+                    IntPtr f_e = Win32Locator.locateWindow(this.first_editor_wnd_str);
+                    if (f_e != IntPtr.Zero)
+                    {
+                        SetForegroundWindow(f_e);
+                    }
+                    else {
+                        Trace.WriteLine("did not find the window");
+                    }
+                }
                 for (int i = 0; i < this.max_send_ops; i++)
                 {
-                    String str = actions[i].getValue(req);
-                    SendKeys.Send(str);
+                        String str = actions[i].getValue(req);
+                        SendKeys.Send(str);
                 }
                 return true;
             }

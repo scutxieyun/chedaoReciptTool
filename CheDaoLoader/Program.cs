@@ -23,7 +23,11 @@ namespace CheDaoLoader
         [STAThread]
         static void Main(string[] args)
         {
-            if (PriorProcess() != null) return;// only one instance
+            if (PriorProcess() != null)
+            {
+                MessageBox.Show("打印辅助系统已经启动");
+                return;// only one instance
+            }
             if (CheckUpdate() == true)
             {
                 StartAutoUpdate();

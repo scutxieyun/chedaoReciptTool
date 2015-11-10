@@ -81,7 +81,7 @@ namespace ReciptGen
 
         private void tmPrint_Tick(object sender, EventArgs e)
         {
-            if (InvoiceList.Count > 0) {
+            if (InvoiceList.Count > 0 && cbPrint.Checked) {
                 if(mConnect.Connected) mConnect.Send(InvoiceList[0]);
                 InvoiceList.RemoveAt(0);
             }

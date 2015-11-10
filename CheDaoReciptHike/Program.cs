@@ -27,6 +27,7 @@ namespace CheDaoReciptHike
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            AppConfig.init();
             try
             {
                 trace_sw = new TraceSwitch("General_Log_SW", "for all trace");
@@ -55,23 +56,25 @@ namespace CheDaoReciptHike
         }
     }
     public static class AppConfig {
-        static public int GetPort() {
+        static int lifetime_of_req = 60;
+        static int port;
+        static public void init() {
             String str = System.Configuration.ConfigurationManager.AppSettings["port"];
-            int port = 3344;
-            if (str != null) {
-                try
-                {
-                    port = int.Parse(str);
-                }
-                catch (Exception e) {
-                    port = 3344;
-                    Trace.WriteLineIf(Program.trace_sw.TraceWarning,"read port information error. set default port 3344");
-                }
-            }else
+            if (str != null)
             {
-                Trace.WriteLineIf(Program.trace_sw.TraceWarning, "no port found in configuration " + Application.ExecutablePath);
+                if (!int.TryParse(str, out port)) port = 3344;
             }
+            str = System.Configuration.ConfigurationManager.AppSettings["lifetime_of_rec"];
+            if (str != null) {
+                if (!int.TryParse(str, out lifetime_of_req)) lifetime_of_req = 60;
+            }
+        }
+        static public int GetPort() {
             return port;
+        }
+
+        static public int GetLifeTimeOfRec() {
+            return lifetime_of_req; //minutes
         }
         public static string GetDebugLevel() {
             String str = System.Configuration.ConfigurationManager.AppSettings["port"];

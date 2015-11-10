@@ -22,6 +22,7 @@ namespace CheDaoReciptHike
         ShuiKongInterface mSendKeyHandle = new SendKeyShuiKong();
         List<CheRequest> mActList = new List<CheRequest>();     //the transaction which is required the recipt
         List<CheRequest> mDoneList = new List<CheRequest>();    //the print is done
+        int m60mCounter = 0;
         public fmReqList()
         {
             log = new fmLog();
@@ -51,6 +52,13 @@ namespace CheDaoReciptHike
                         this.MoveToDoneList(p_item.Order_Number,p_item.Printed_Time);// run in UI thread
                     });
                     break;
+                case CheDaoInterface.delete_cmd:
+                    CheDeleteActionRequest d_item = (CheDeleteActionRequest)req;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        this.MoveToDoneList(d_item.Order_Number, d_item.Printed_Time);// run in UI thread
+                    });
+                    break;
                 default:
                     Trace.WriteLineIf(Program.trace_sw.TraceError, "incorrect message request received " + req.message_type.ToString());
                     break;
@@ -66,8 +74,9 @@ namespace CheDaoReciptHike
             lbStatus.Text = "通信状态：" + info;
         }
         private void _AddRequest(CheRequest req) {
+            Boolean ref_req = false;
             if (mActList.Count == 0)
-                this.Refresh(); 
+                ref_req = true;
             mActList.Add(req);
             lsReqs.BeginUpdate();
             DateTime tran_date;
@@ -85,6 +94,7 @@ namespace CheDaoReciptHike
             lvi.Tag = req;
             this.lsReqs.Items.Insert(0,lvi);
             this.lsReqs.EndUpdate();
+            if (ref_req) this.Refresh();
         }
 
         private void fmReqList_FormClosed(object sender, FormClosedEventArgs e)
@@ -94,6 +104,7 @@ namespace CheDaoReciptHike
 
         private void timer_1min_Tick(object sender, EventArgs e)
         {
+
             if (mSendKeyHandle.DetectShuiKong() == true)
             {
                 this.lbskStatus.Text = "税控状态:连接中";
@@ -101,6 +112,12 @@ namespace CheDaoReciptHike
             else
             {
                 this.lbskStatus.Text = "税控状态:无连接";
+            }
+
+            m60mCounter++;
+            if (m60mCounter >= AppConfig.GetLifeTimeOfRec()/2) {
+                m60mCounter = 0 ;
+                CheDaoFactory.Handle_Internal_Package(CheDaoInterface.clean_cmd, Encoding.UTF8.GetBytes("Cleanup"));
             }
 
         }
@@ -113,13 +130,15 @@ namespace CheDaoReciptHike
                 this.lsDone.Items.Insert(0,list_items[0]).SubItems.Add(Printed_Time);
                 this.mActList.Remove((CheRequest)list_items[0].Tag);
                 this.mDoneList.Add((CheRequest)list_items[0].Tag);
-
+                if (mActList.Count == 0) this.Refresh();
             }
 
         }
+        
+
 
         private void lsReqs_DoubleClick(object sender, EventArgs e)
-        {
+        {//note other functions call it directly, don't use sender or e
             if (lsReqs.SelectedItems.Count < 1) return;
             ListViewItem act_item = lsReqs.SelectedItems[0];
             CheRequest req = (CheRequest)act_item.Tag;
@@ -127,8 +146,14 @@ namespace CheDaoReciptHike
             {
                 if (mSendKeyHandle.DetectShuiKong() == true)
                 {
-                    mSendKeyHandle.SendRecipt(req);
-                    CheDaoFactory.Handle_Internal_Package(CheDaoInterface.print_confirm, Encoding.UTF8.GetBytes(req.Order_Number));
+                    try
+                    {
+                        if (mSendKeyHandle.SendRecipt(req) == true)
+                            CheDaoFactory.Handle_Internal_Package(CheDaoInterface.print_confirm, Encoding.UTF8.GetBytes(req.Order_Number));
+                    }
+                    catch (Exception ex) {
+                        MessageBox.Show("推送消息失败" + ex.Message);
+                    }
                 }
                 else
                 {
@@ -136,6 +161,7 @@ namespace CheDaoReciptHike
                 }
             }
         }
+
         /**
         Init the internal message handle
         **/
@@ -155,13 +181,7 @@ namespace CheDaoReciptHike
             layoutMainContent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Process process = new Process();
-            process.StartInfo.FileName = "notepad.exe";
-            process.Start();
-        }
-
+        
         private void fmReqList_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F12) {
@@ -201,6 +221,9 @@ namespace CheDaoReciptHike
             {
                 lsReqs_DoubleClick(sender, e);
             }
+            if (e.KeyChar == (char)Keys.Delete) {
+                tsItemDelete_Click(sender, e);
+            }
         }
         private void layoutMainContent() {
             if (plBanner.Visible)
@@ -228,6 +251,55 @@ namespace CheDaoReciptHike
             paddedBounds.Inflate(-2, -2);
             e.Graphics.DrawString(tcMain.TabPages[e.Index].Text, this.Font, SystemBrushes.MenuText, paddedBounds);
 
+        }
+
+        private void lsDone_DoubleClick(object sender, EventArgs e)
+        {
+            if (lsDone.SelectedItems.Count < 1) return;
+            ListViewItem act_item = lsDone.SelectedItems[0];
+            CheRequest req = (CheRequest)act_item.Tag;
+            if (req != null)
+            {
+                if (mSendKeyHandle.DetectShuiKong() == true)
+                {
+                    if (MessageBox.Show("重新打印已打印记录", "重新打印", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
+                    mSendKeyHandle.SendRecipt(req);
+                }
+                else
+                {
+                    MessageBox.Show("无法检测到税控软件");
+                }
+            }
+        }
+
+        private void tsItemPrint_Click(object sender, EventArgs e)
+        {
+            if(lsReqs.SelectedItems.Count > 0)
+                lsReqs_DoubleClick(sender, e);
+        }
+
+        private void tsItemDelete_Click(object sender, EventArgs e)
+        {
+            if (lsReqs.SelectedItems.Count < 1) return;
+            ListViewItem act_item = lsReqs.SelectedItems[0];
+            CheRequest req = (CheRequest)act_item.Tag;
+            CheDaoFactory.Handle_Internal_Package(CheDaoInterface.delete_cmd, Encoding.UTF8.GetBytes(req.Order_Number));
+        }
+
+        private void tsItemCopyClient_Click(object sender, EventArgs e)
+        {
+            if (lsReqs.SelectedItems.Count < 1) return;
+            ListViewItem act_item = lsReqs.SelectedItems[0];
+            CheRequest req = (CheRequest)act_item.Tag;
+            System.Windows.Forms.Clipboard.SetText(req.Customer_Text);
+        }
+
+        private void tsItemCopyLicense_Click(object sender, EventArgs e)
+        {
+            if (lsReqs.SelectedItems.Count < 1) return;
+            ListViewItem act_item = lsReqs.SelectedItems[0];
+            CheRequest req = (CheRequest)act_item.Tag;
+            System.Windows.Forms.Clipboard.SetText(req.LicenseNumber);
         }
     }
 }
