@@ -167,7 +167,6 @@ namespace CheDaoReciptHike
         private void fmReqList_Load(object sender, EventArgs e)
         {
             CheDaoFactory.init();
-            layoutMainContent();
             this.Text += " " + AppConfig.GetVersion();
             if (AppConfig.GetBanner() == null)
             {
@@ -229,8 +228,8 @@ namespace CheDaoReciptHike
                 plBanner.Width = this.flMain.Width;
             if (!plBanner.Visible) tcMain.Height = flMain.Height - plInfo.Height - 30;
             else tcMain.Height = flMain.Height - plInfo.Height - this.plBanner.Height - 30;
-            //tcMain.Width = this.flMain.Width;
-            //plInfo.Width = this.flMain.Width;
+            tcMain.Width = this.flMain.Width;
+            plInfo.Width = this.flMain.Width;
         }
 
         private void flMain_Resize(object sender, EventArgs e)

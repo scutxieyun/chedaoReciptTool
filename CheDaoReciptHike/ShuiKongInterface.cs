@@ -46,11 +46,24 @@ namespace CheDaoReciptHike
         private static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
         [DllImport("user32.dll", EntryPoint = "FindWindow")]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern Boolean SetForegroundWindow(IntPtr hwnd);
 
         static String wnd_trace; // for debug use
         static public String Dump() {
             return "Latest window trace record: " + wnd_trace;
         }
+        static public Boolean SetForeGWindow(IntPtr hwnd) {
+            Boolean res = false;
+            if (hwnd != IntPtr.Zero) {
+                res = SetForegroundWindow(hwnd);
+                if (res == false) {
+                    Trace.WriteLineIf(Program.trace_sw.TraceError, "set to foreground failed");
+                }
+            }
+            return false;
+        }
+
         static public IntPtr locateWindow(String path)
         {
             String[] nodes = path.Split(new Char[] { '/' });
@@ -62,7 +75,7 @@ namespace CheDaoReciptHike
                 cur = NewFindWindow(cur, nodes[index]);
                 wnd_trace = String.Format("{0:s} -> {1:X00000}", wnd_trace, cur.ToInt64());
                 index++;
-            } while (cur != null && index < nodes.Length);
+            } while (cur != IntPtr.Zero && index < nodes.Length);
             return cur;
         }
         static IntPtr NewFindWindow(IntPtr p, String f)
@@ -88,7 +101,7 @@ namespace CheDaoReciptHike
                 {
                     cur_child = FindWindowEx(p, cur_child, WndClass, WndName);
                     cur_index++;
-                } while (cur_child != null && cur_index <= WndIndex);
+                } while (cur_child != IntPtr.Zero && cur_index <= WndIndex);
                 res = cur_child;
             }
             return res;
@@ -227,12 +240,12 @@ namespace CheDaoReciptHike
         {
             if (anch_wnd_handle != IntPtr.Zero)
             {
-                SetForegroundWindow(anch_wnd_handle);
+                Win32Locator.SetForeGWindow(anch_wnd_handle);
                 if (this.first_editor_wnd_str != null) {
                     IntPtr f_e = Win32Locator.locateWindow(this.first_editor_wnd_str);
                     if (f_e != IntPtr.Zero)
                     {
-                        SetForegroundWindow(f_e);
+                        Win32Locator.SetForeGWindow(f_e);
                     }
                     else {
                         Trace.WriteLine("did not find the window");
@@ -297,7 +310,7 @@ namespace CheDaoReciptHike
                 if (wnd_str != null) {
                     IntPtr wnd_ptr = Win32Locator.locateWindow(wnd_str);
                     if (wnd_ptr == null) break;
-                    if (firstitem) SetForegroundWindow(wnd_ptr);
+                    if (firstitem) Win32Locator.SetForeGWindow(wnd_ptr);
                     firstitem = false;
                     String text = mFieldMap[wnd_str].GetValue(req, null).ToString();
                     try

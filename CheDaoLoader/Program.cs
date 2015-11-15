@@ -19,6 +19,7 @@ namespace CheDaoLoader
         static int app_status = 0;
         static DateTime last_start_tick = DateTime.MinValue;
         static Timer mTimer;
+        static String mAppCode;
 
         [STAThread]
         static void Main(string[] args)
@@ -28,11 +29,15 @@ namespace CheDaoLoader
                 MessageBox.Show("打印辅助系统已经启动");
                 return;// only one instance
             }
+
+            if(Configure_Check() == false) return;
+
             if (CheckUpdate() == true)
             {
                 StartAutoUpdate();
             }
-            if (StartApp() == true)
+
+            /* if (StartApp() == true)
             {
                 mNotify = new NotifyIcon();
                 mNotify.Icon = Resource.trayicon;
@@ -46,7 +51,26 @@ namespace CheDaoLoader
                 Application.Run();
                 mNotify.Visible = false;
                 mNotify.Dispose();
+            }*/
+        }
+
+        private static Boolean Configure_Check()
+        {
+            Configuration conf = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            if (null == conf.AppSettings.Settings["client_id"])
+            {
+                fmConfigure fmConf = new fmConfigure();
+                if (fmConf.ShowDialog() == DialogResult.OK)
+                {
+                    conf.AppSettings.Settings.Add("client_id", fmConf.AppCode);
+                    conf.Save(ConfigurationSaveMode.Modified);
+                    mAppCode = fmConf.AppCode;
+                    return true;
+                }
+                return false;
             }
+            mAppCode = conf.AppSettings.Settings["client_id"].Value;
+            return true;
         }
 
         private static void MTimer_Tick(object sender, EventArgs e)
@@ -169,7 +193,9 @@ namespace CheDaoLoader
             }
 
             AutoUpdater.AppUpdater update_check = new AutoUpdater.AppUpdater();
-            update_check.UpdaterUrl = updaterXmlFiles.GetNodeValue("//Url") + UpdateListFile;
+            String app_id = updaterXmlFiles.FindNode("//Application").Attributes["applicationId"].Value;
+            String app_version = updaterXmlFiles.GetNodeValue("//Application//Version");
+            update_check.UpdaterUrl = String.Format("{0:s}{1:s}?client_id={2:s}&app_id={3:s}&app_ver={4:s}",updaterXmlFiles.GetNodeValue("//Url"),UpdateListFile,mAppCode,app_id,app_version);
             String tempUpdatePath = currentDirectory + "\\" + TempFilePath;
             try
             {

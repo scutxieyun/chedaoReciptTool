@@ -118,7 +118,7 @@
             this.tsItemDelete,
             this.tsItemCopy});
             this.cmList.Name = "cmList";
-            this.cmList.Size = new System.Drawing.Size(220, 127);
+            this.cmList.Size = new System.Drawing.Size(220, 94);
             // 
             // tsItemPrint
             // 
@@ -146,14 +146,14 @@
             // tsItemCopyClient
             // 
             this.tsItemCopyClient.Name = "tsItemCopyClient";
-            this.tsItemCopyClient.Size = new System.Drawing.Size(211, 30);
+            this.tsItemCopyClient.Size = new System.Drawing.Size(129, 30);
             this.tsItemCopyClient.Text = "客户";
             this.tsItemCopyClient.Click += new System.EventHandler(this.tsItemCopyClient_Click);
             // 
             // tsItemCopyLicense
             // 
             this.tsItemCopyLicense.Name = "tsItemCopyLicense";
-            this.tsItemCopyLicense.Size = new System.Drawing.Size(211, 30);
+            this.tsItemCopyLicense.Size = new System.Drawing.Size(129, 30);
             this.tsItemCopyLicense.Text = "车牌";
             this.tsItemCopyLicense.Click += new System.EventHandler(this.tsItemCopyLicense_Click);
             // 
@@ -168,8 +168,7 @@
             // 
             // tcMain
             // 
-            this.tcMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tcMain.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tcMain.Controls.Add(this.tabPage1);
             this.tcMain.Controls.Add(this.tabPage2);
             this.tcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;

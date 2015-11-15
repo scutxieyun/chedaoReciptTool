@@ -40,6 +40,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,6 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CAreaInfo.cs" />
+    <Compile Include="fmConfigure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmConfigure.Designer.cs">
+      <DependentUpon>fmConfigure.cs</DependentUpon>
+    </Compile>
     <Compile Include="HiddenForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,7 +72,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoUpdater\AutoUpdater.csproj">
@@ -73,6 +83,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="fmConfigure.resx">
+      <DependentUpon>fmConfigure.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HiddenForm.resx">
       <DependentUpon>HiddenForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -85,6 +98,7 @@
     <None Include="Resources\chedao-logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\cities.json" />
     <None Include="Resources\trayicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
