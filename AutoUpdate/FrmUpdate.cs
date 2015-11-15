@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using AutoUpdater;
 namespace AutoUpdate
 {
 	/// <summary>
-	/// Form1 µÄÕªÒªËµÃ÷¡£
+	/// Form1 çš„æ‘˜è¦è¯´æ˜ã€‚
 	/// </summary>
 	public class FrmUpdate : System.Windows.Forms.Form
 	{
@@ -40,7 +40,7 @@ namespace AutoUpdate
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Button btnFinish;
 		/// <summary>
-		/// ±ØĞèµÄÉè¼ÆÆ÷±äÁ¿¡£
+		/// å¿…éœ€çš„è®¾è®¡å™¨å˜é‡ã€‚
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
@@ -48,17 +48,17 @@ namespace AutoUpdate
 		public FrmUpdate()
 		{
 			//
-			// Windows ´°ÌåÉè¼ÆÆ÷Ö§³ÖËù±ØĞèµÄ
+			// Windows çª—ä½“è®¾è®¡å™¨æ”¯æŒæ‰€å¿…éœ€çš„
 			//
 			InitializeComponent();
 
 			//
-			// TODO: ÔÚ InitializeComponent µ÷ÓÃºóÌí¼ÓÈÎºÎ¹¹Ôìº¯Êı´úÂë
+			// TODO: åœ¨ InitializeComponent è°ƒç”¨åæ·»åŠ ä»»ä½•æ„é€ å‡½æ•°ä»£ç 
 			//
 		}
 
 		/// <summary>
-		/// ÇåÀíËùÓĞÕıÔÚÊ¹ÓÃµÄ×ÊÔ´¡£
+		/// æ¸…ç†æ‰€æœ‰æ­£åœ¨ä½¿ç”¨çš„èµ„æºã€‚
 		/// </summary>
 		protected override void Dispose( bool disposing )
 		{
@@ -72,10 +72,10 @@ namespace AutoUpdate
 			base.Dispose( disposing );
 		}
 
-		#region Windows ´°ÌåÉè¼ÆÆ÷Éú³ÉµÄ´úÂë
+		#region Windows çª—ä½“è®¾è®¡å™¨ç”Ÿæˆçš„ä»£ç 
 		/// <summary>
-		/// Éè¼ÆÆ÷Ö§³ÖËùĞèµÄ·½·¨ - ²»ÒªÊ¹ÓÃ´úÂë±à¼­Æ÷ĞŞ¸Ä
-		/// ´Ë·½·¨µÄÄÚÈİ¡£
+		/// è®¾è®¡å™¨æ”¯æŒæ‰€éœ€çš„æ–¹æ³• - ä¸è¦ä½¿ç”¨ä»£ç ç¼–è¾‘å™¨ä¿®æ”¹
+		/// æ­¤æ–¹æ³•çš„å†…å®¹ã€‚
 		/// </summary>
 		private void InitializeComponent()
 		{
@@ -135,7 +135,7 @@ namespace AutoUpdate
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(226, 24);
             this.label1.TabIndex = 9;
-            this.label1.Text = "ÒÔÏÂÎª¸üĞÂÎÄ¼şÁĞ±í";
+            this.label1.Text = "ä»¥ä¸‹ä¸ºæ›´æ–°æ–‡ä»¶åˆ—è¡¨";
             // 
             // groupBox2
             // 
@@ -162,17 +162,17 @@ namespace AutoUpdate
             // 
             // chFileName
             // 
-            this.chFileName.Text = "×é¼şÃû";
+            this.chFileName.Text = "ç»„ä»¶å";
             this.chFileName.Width = 123;
             // 
             // chVersion
             // 
-            this.chVersion.Text = "°æ±¾ºÅ";
+            this.chVersion.Text = "ç‰ˆæœ¬å·";
             this.chVersion.Width = 98;
             // 
             // chProgress
             // 
-            this.chProgress.Text = "½ø¶È";
+            this.chProgress.Text = "è¿›åº¦";
             this.chProgress.Width = 47;
             // 
             // pbDownFile
@@ -188,7 +188,7 @@ namespace AutoUpdate
             this.lbState.Name = "lbState";
             this.lbState.Size = new System.Drawing.Size(400, 24);
             this.lbState.TabIndex = 4;
-            this.lbState.Text = "µã»÷¡°ÏÂÒ»²½¡±¿ªÊ¼¸üĞÂÎÄ¼ş";
+            this.lbState.Text = "ç‚¹å‡»â€œä¸‹ä¸€æ­¥â€å¼€å§‹æ›´æ–°æ–‡ä»¶";
             // 
             // groupBox1
             // 
@@ -204,7 +204,7 @@ namespace AutoUpdate
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(133, 36);
             this.btnNext.TabIndex = 3;
-            this.btnNext.Text = "ÏÂÒ»²½(&N)>";
+            this.btnNext.Text = "ä¸‹ä¸€æ­¥(&N)>";
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
             // btnCancel
@@ -213,7 +213,7 @@ namespace AutoUpdate
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(134, 36);
             this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "È¡Ïû(&C)";
+            this.btnCancel.Text = "å–æ¶ˆ(&C)";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // panel2
@@ -236,7 +236,7 @@ namespace AutoUpdate
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(300, 24);
             this.label4.TabIndex = 13;
-            this.label4.Text = "±±¾©³µµ½ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾";
+            this.label4.Text = "åŒ—äº¬è½¦åˆ°ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸";
             // 
             // linkLabel1
             // 
@@ -255,21 +255,21 @@ namespace AutoUpdate
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("ËÎÌå", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Font = new System.Drawing.Font("å®‹ä½“", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label2.Location = new System.Drawing.Point(40, 96);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(387, 72);
             this.label2.TabIndex = 10;
-            this.label2.Text = "     ³ÌĞò¸üĞÂÍê³É,ÇëÖØĞÂÆô¶¯Ó¦ÓÃ³ÌĞò¡£";
+            this.label2.Text = "     ç¨‹åºæ›´æ–°å®Œæˆ,è¯·é‡æ–°å¯åŠ¨åº”ç”¨ç¨‹åºã€‚";
             // 
             // label5
             // 
-            this.label5.Font = new System.Drawing.Font("ËÎÌå", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.Font = new System.Drawing.Font("å®‹ä½“", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label5.Location = new System.Drawing.Point(27, 12);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(213, 36);
             this.label5.TabIndex = 9;
-            this.label5.Text = "¸ĞĞ»Ê¹ÓÃÔÚÏßÉı¼¶";
+            this.label5.Text = "æ„Ÿè°¢ä½¿ç”¨åœ¨çº¿å‡çº§";
             // 
             // groupBox3
             // 
@@ -295,7 +295,7 @@ namespace AutoUpdate
             this.btnFinish.Name = "btnFinish";
             this.btnFinish.Size = new System.Drawing.Size(133, 36);
             this.btnFinish.TabIndex = 3;
-            this.btnFinish.Text = "Íê³É(&F)";
+            this.btnFinish.Text = "å®Œæˆ(&F)";
             this.btnFinish.Click += new System.EventHandler(this.btnFinish_Click);
             // 
             // FrmUpdate
@@ -315,7 +315,7 @@ namespace AutoUpdate
             this.MinimizeBox = false;
             this.Name = "FrmUpdate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "×Ô¶¯¸üĞÂ";
+            this.Text = "è‡ªåŠ¨æ›´æ–°";
             this.Load += new System.EventHandler(this.FrmUpdate_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -331,11 +331,11 @@ namespace AutoUpdate
 		private int availableUpdate = 0;
 		bool isRun = false;
 		string mainAppExe = "";
-
-		/// <summary>
-		/// Ó¦ÓÃ³ÌĞòµÄÖ÷Èë¿Úµã¡£
-		/// </summary>
-		[STAThread]
+        Hashtable htUpdateFile = null;
+        /// <summary>
+        /// åº”ç”¨ç¨‹åºçš„ä¸»å…¥å£ç‚¹ã€‚
+        /// </summary>
+        [STAThread]
 		static void Main() 
 		{
 			
@@ -347,7 +347,7 @@ namespace AutoUpdate
 			string currentDirectory =Environment.CurrentDirectory ;
 			if(!AppConst.GetConfig())
 			{
-				MessageBox.Show("ÅäÖÃÎÄ¼ş¶ÁÈ¡Ê§°Ü£¡ÇëÈ·¶¨ÅäÖÃÎÄ¼ş·ÅÔÚ"+currentDirectory+"¸ÃÄ¿Â¼ÏÂ");
+				MessageBox.Show("é…ç½®æ–‡ä»¶è¯»å–å¤±è´¥ï¼è¯·ç¡®å®šé…ç½®æ–‡ä»¶æ”¾åœ¨"+currentDirectory+"è¯¥ç›®å½•ä¸‹");
 				return;
 			}
 			panel2.Visible = false;
@@ -359,38 +359,38 @@ namespace AutoUpdate
 			
 			try
 			{
-				//´Ó±¾µØ¶ÁÈ¡¸üĞÂÅäÖÃÎÄ¼şĞÅÏ¢
+				//ä»æœ¬åœ°è¯»å–æ›´æ–°é…ç½®æ–‡ä»¶ä¿¡æ¯
 				updaterXmlFiles = new XmlFiles(localXmlFile );
 			}
 			catch
 			{
-				MessageBox.Show("ÅäÖÃÎÄ¼ş³ö´í!","´íÎó",MessageBoxButtons.OK,MessageBoxIcon.Error);
+				MessageBox.Show("é…ç½®æ–‡ä»¶å‡ºé”™!","é”™è¯¯",MessageBoxButtons.OK,MessageBoxIcon.Error);
 				this.Close();
 				return;
 			}
-			//»ñÈ¡·şÎñÆ÷µØÖ·
+			//è·å–æœåŠ¡å™¨åœ°å€
 			updateUrl = updaterXmlFiles.GetNodeValue("//Url");
 
 			AppUpdater appUpdater = new AppUpdater();
 			appUpdater.UpdaterUrl = updateUrl + "/UpdateList.xml";
 
-			//Óë·şÎñÆ÷Á¬½Ó,ÏÂÔØ¸üĞÂÅäÖÃÎÄ¼ş
+			//ä¸æœåŠ¡å™¨è¿æ¥,ä¸‹è½½æ›´æ–°é…ç½®æ–‡ä»¶
 			try
 			{
-				//ÁÙÊ±¸üĞÂÎÄ¼şÄ¿Â¼
+				//ä¸´æ—¶æ›´æ–°æ–‡ä»¶ç›®å½•
 				tempUpdatePath = currentDirectory+"\\"+AppConst.TempFilePath;
 				appUpdater.DownAutoUpdateFile(tempUpdatePath);
 			}
 			catch
 			{
-				MessageBox.Show("Óë·şÎñÆ÷Á¬½ÓÊ§°Ü,²Ù×÷³¬Ê±!","ÌáÊ¾",MessageBoxButtons.OK,MessageBoxIcon.Information);
+				MessageBox.Show("ä¸æœåŠ¡å™¨è¿æ¥å¤±è´¥,æ“ä½œè¶…æ—¶!","æç¤º",MessageBoxButtons.OK,MessageBoxIcon.Information);
 				this.Close();
 				return;
 
 			}
 
-			//»ñÈ¡¸üĞÂÎÄ¼şÁĞ±í
-			Hashtable htUpdateFile = new Hashtable();
+			//è·å–æ›´æ–°æ–‡ä»¶åˆ—è¡¨
+			htUpdateFile = new Hashtable();
 
 			serverXmlFile = tempUpdatePath + "\\UpdateList.xml";
 			if(!File.Exists(serverXmlFile))
@@ -427,7 +427,7 @@ namespace AutoUpdate
 			}
 			else
 			{
-				MessageBox.Show("Ã»ÓĞ¿ÉÓÃµÄ¸üĞÂ!","×Ô¶¯¸üĞÂ",MessageBoxButtons.OK,MessageBoxIcon.Information);
+				MessageBox.Show("æ²¡æœ‰å¯ç”¨çš„æ›´æ–°!","è‡ªåŠ¨æ›´æ–°",MessageBoxButtons.OK,MessageBoxIcon.Information);
 				return;
 			}
 
@@ -450,19 +450,22 @@ namespace AutoUpdate
 				}
 			}
 			WebClient wcClient = new WebClient();
-			for(int i = 0;i < this.lvUpdateList.Items.Count;i++)
+			for(int i = 0;i < htUpdateFile.Count;i++)
 			{
-				string UpdateFile = lvUpdateList.Items[i].Text.Trim();
-				string updateFileUrl = updateUrl + lvUpdateList.Items[i].Text.Trim();
+                string UpdateFile = ((string[])htUpdateFile[i])[0].Trim();
+                string updateFileUrl = updateUrl + UpdateFile;
 				long fileLength = 0;
 				try
 				{	
-					WebRequest webReq = WebRequest.Create(updateFileUrl);
-					WebResponse webRes = webReq.GetResponse();
-					fileLength = webRes.ContentLength;
-					lbState.Text = "ÕıÔÚÏÂÔØ¸üĞÂÎÄ¼ş,ÇëÉÔºó...";
-					pbDownFile.Value = 0;
-					pbDownFile.Maximum = (int)fileLength;
+					HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(updateFileUrl);
+                    HttpWebResponse webRes = (HttpWebResponse) webReq.GetResponse();
+					fileLength = webRes.ContentLength > 0 ? webRes.ContentLength : 0;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        lbState.Text = "æ­£åœ¨ä¸‹è½½æ›´æ–°æ–‡ä»¶,è¯·ç¨å...";
+                        pbDownFile.Value = 0;
+                        pbDownFile.Maximum = (int)fileLength;
+                    });
 					Stream srm = webRes.GetResponseStream();
 					StreamReader srmReader = new StreamReader(srm);
 					byte[] bufferbyte = new byte[fileLength];
@@ -475,13 +478,15 @@ namespace AutoUpdate
 						if (downByte == 0) {break;};
 						startByte += downByte;
 						allByte -= downByte;
-						pbDownFile.Value += downByte;
-
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            pbDownFile.Value += downByte;
+                        });
 						float part = (float)startByte / 1024;
 						float total = (float)bufferbyte.Length / 1024;
 						int percent =Convert.ToInt32((part/total)*100);
 
-						this.lvUpdateList.Items[i].SubItems[2].Text = percent.ToString() + "%";
+						//this.lvUpdateList.Items[i].SubItems[2].Text = percent.ToString() + "%";
 
 					}
 					
@@ -497,13 +502,16 @@ namespace AutoUpdate
 				}
 				catch(WebException ex)
 				{
-					MessageBox.Show("¸üĞÂÎÄ¼şÏÂÔØÊ§°Ü£¡"+ex.Message.ToString(),"´íÎó",MessageBoxButtons.OK,MessageBoxIcon.Error);
+					MessageBox.Show("æ›´æ–°æ–‡ä»¶ä¸‹è½½å¤±è´¥ï¼"+ex.Message.ToString(),"é”™è¯¯",MessageBoxButtons.OK,MessageBoxIcon.Error);
 				}
 			}
-			InvalidateControl();
-			this.Cursor = Cursors.Default;
+            this.Invoke((MethodInvoker)delegate
+            {
+                InvalidateControl();
+                this.Cursor = Cursors.Default;
+            });
 		}
-		//´´½¨Ä¿Â¼
+		//åˆ›å»ºç›®å½•
 		private void CreateDirtory(string path)
 		{
 			if(!File.Exists(path))
@@ -519,7 +527,7 @@ namespace AutoUpdate
 			}
 		}
 
-		//¸´ÖÆÎÄ¼ş;
+		//å¤åˆ¶æ–‡ä»¶;
 		public void CopyFile(string sourcePath,string objPath)
 		{
 //			char[] split = @"\".ToCharArray();
@@ -543,10 +551,10 @@ namespace AutoUpdate
 
 		private void linkLabel1_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
 		{
-			//´ò¿ªÒÚÍòÍøÊ×Ò³
+			//æ‰“å¼€äº¿ä¸‡ç½‘é¦–é¡µ
 			System.Diagnostics.Process.Start(linkLabel1.Text);
 		}
-		//µã»÷Íê³É¸´ÖÆ¸üĞÂÎÄ¼şµ½Ó¦ÓÃ³ÌĞòÄ¿Â¼
+		//ç‚¹å‡»å®Œæˆå¤åˆ¶æ›´æ–°æ–‡ä»¶åˆ°åº”ç”¨ç¨‹åºç›®å½•
 		private void btnFinish_Click(object sender, System.EventArgs e)
 		{
 			
@@ -564,7 +572,7 @@ namespace AutoUpdate
 			if(true == this.isRun) Process.Start(mainAppExe);
 		}
 		
-		//ÖØĞÂ»æÖÆ´°Ìå²¿·Ö¿Ø¼şÊôĞÔ
+		//é‡æ–°ç»˜åˆ¶çª—ä½“éƒ¨åˆ†æ§ä»¶å±æ€§
 		private void InvalidateControl()
 		{
 			panel2.Location = panel1.Location;
@@ -577,7 +585,7 @@ namespace AutoUpdate
 			btnFinish.Location = btnCancel.Location;
 			btnFinish.Visible = true;
 		}
-		//ÅĞ¶ÏÖ÷Ó¦ÓÃ³ÌĞòÊÇ·ñÕıÔÚÔËĞĞ
+		//åˆ¤æ–­ä¸»åº”ç”¨ç¨‹åºæ˜¯å¦æ­£åœ¨è¿è¡Œ
 		private bool IsMainAppRun()
 		{
 			string mainAppExe = updaterXmlFiles.GetNodeValue("//EntryPoint");
