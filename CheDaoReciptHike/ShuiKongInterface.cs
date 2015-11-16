@@ -64,7 +64,7 @@ namespace CheDaoReciptHike
             return false;
         }
 
-        static public IntPtr locateWindow(String path)
+        static public IntPtr locateWindow(String path,String ClassPostFix)
         {
             String[] nodes = path.Split(new Char[] { '/' });
             wnd_trace = "";
@@ -72,13 +72,13 @@ namespace CheDaoReciptHike
             int index = 0;
             if (nodes.Length == 0) return IntPtr.Zero;
             do {
-                cur = NewFindWindow(cur, nodes[index]);
+                cur = NewFindWindow(cur, nodes[index],ClassPostFix);
                 wnd_trace = String.Format("{0:s} -> {1:X00000}", wnd_trace, cur.ToInt64());
                 index++;
             } while (cur != IntPtr.Zero && index < nodes.Length);
             return cur;
         }
-        static IntPtr NewFindWindow(IntPtr p, String f)
+        static IntPtr NewFindWindow(IntPtr p, String f,String ClassPostFix)
         {
             Regex reg = new Regex(@"([S|T])\((.*)\)\x5b(\d+)\x5d");
             Match m = reg.Match(f);
@@ -87,10 +87,11 @@ namespace CheDaoReciptHike
             IntPtr res = IntPtr.Zero;
             IntPtr cur_child = IntPtr.Zero;
             int WndIndex = 0;
+            if (ClassPostFix == null) ClassPostFix = "";
             if (m.Success) {
                 if (m.Groups[1].Value == "T")
                 {
-                    WndClass = m.Groups[2].Value == "" ? null : m.Groups[2].Value;
+                    WndClass = m.Groups[2].Value == "" ? null : m.Groups[2].Value + ClassPostFix;
                 }
                 if (m.Groups[1].Value == "S") {
                     WndName = m.Groups[2].Value == "" ? null : m.Groups[2].Value;
@@ -121,9 +122,9 @@ namespace CheDaoReciptHike
 
     class SendKeyShuiKong : ShuiKongInterface
     {
-        String anch_wnd_str = null;
-        String first_editor_wnd_str = null;
-        IntPtr anch_wnd_handle = IntPtr.Zero;
+        protected String anch_wnd_str = null;
+        protected String first_editor_wnd_str = null;
+        protected IntPtr anch_wnd_handle = IntPtr.Zero;
         int max_send_ops;
         String next_key = "{ENTER}";
         public interface ValueToBeSent
@@ -216,15 +217,20 @@ namespace CheDaoReciptHike
             }
 
         }
+        protected virtual void AnchWndChangeEvt(IntPtr wnd) {
+            return;
+        }
         bool ShuiKongInterface.DetectShuiKong()
         {
             IntPtr tmp = anch_wnd_handle;
-            anch_wnd_handle = Win32Locator.locateWindow(anch_wnd_str);
-            //if (tmp != anch_wnd_handle)
+            anch_wnd_handle = Win32Locator.locateWindow(anch_wnd_str,null);
+            if (tmp != anch_wnd_handle)
             {
-                //Trace.WriteLineIf(Program.trace_sw.TraceInfo,String.Format("locate {0:s} at {1:X00000}",anch_wnd_str,anch_wnd_handle));
+                Trace.WriteLineIf(Program.trace_sw.TraceVerbose,String.Format("locate {0:s} at {1:X00000}",anch_wnd_str,anch_wnd_handle));
+                AnchWndChangeEvt(anch_wnd_handle);
+
             }
-            Trace.WriteLineIf(Program.trace_sw.TraceInfo, String.Format("locate {0:s} at {1:X00000}", anch_wnd_str, anch_wnd_handle));
+            //Trace.WriteLineIf(Program.trace_sw.TraceInfo, String.Format("locate {0:s} at {1:X00000}", anch_wnd_str, anch_wnd_handle));
             return anch_wnd_handle != IntPtr.Zero;
         }
 
@@ -232,6 +238,10 @@ namespace CheDaoReciptHike
         {
             return anch_wnd_str;
         }
+        protected virtual String GetWndClassPostFix() {
+            return null;
+        }
+
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         internal static extern Boolean SetForegroundWindow(IntPtr hwnd);
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
@@ -242,13 +252,13 @@ namespace CheDaoReciptHike
             {
                 Win32Locator.SetForeGWindow(anch_wnd_handle);
                 if (this.first_editor_wnd_str != null) {
-                    IntPtr f_e = Win32Locator.locateWindow(this.first_editor_wnd_str);
+                    IntPtr f_e = Win32Locator.locateWindow(this.first_editor_wnd_str, GetWndClassPostFix());
                     if (f_e != IntPtr.Zero)
                     {
                         Win32Locator.SetForeGWindow(f_e);
                     }
                     else {
-                        Trace.WriteLine("did not find the window");
+                        Trace.WriteLineIf(Program.trace_sw.TraceError,"did not find the window");
                     }
                 }
                 for (int i = 0; i < this.max_send_ops; i++)
@@ -282,12 +292,7 @@ namespace CheDaoReciptHike
         }
         public bool DetectShuiKong()
         {
-            IntPtr tmp = Win32Locator.locateWindow(mFirstWnd);
-            //if (tmp != anch_wnd_handle)
-            {
-                //Trace.WriteLineIf(Program.trace_sw.TraceInfo,String.Format("locate {0:s} at {1:X00000}",anch_wnd_str,anch_wnd_handle));
-            }
-            Trace.WriteLineIf(Program.trace_sw.TraceInfo, String.Format("locate {0:s} at {1:X00000}", mFirstWnd, tmp));
+            IntPtr tmp = Win32Locator.locateWindow(mFirstWnd,null);
             return tmp != IntPtr.Zero;
         }
 
@@ -308,7 +313,7 @@ namespace CheDaoReciptHike
             foreach (String wnd_str in mFieldMap.Keys) {
                 res = false;
                 if (wnd_str != null) {
-                    IntPtr wnd_ptr = Win32Locator.locateWindow(wnd_str);
+                    IntPtr wnd_ptr = Win32Locator.locateWindow(wnd_str,null);
                     if (wnd_ptr == null) break;
                     if (firstitem) Win32Locator.SetForeGWindow(wnd_ptr);
                     firstitem = false;
@@ -336,87 +341,45 @@ namespace CheDaoReciptHike
         }
     }
 
-    //obsoleted
-    class YiYeShuiKong:ShuiKongInterface{
-        //static String edit_loc = "S((亿业)网络发票及管理系统)[0]/T(TPanel)[0]/T(TPanel)[0]/T(TF_write_jhd)[0]/T(TPageControl)[0]/S(发票明细)[0]/T(TPanel)[3]/T(TwwDBLookupCombo)[0]";
-        static String edit_loc = "S((亿业)网络发票及管理系统)[0]";
-        IntPtr edit_ptr = IntPtr.Zero;
-        bool ShuiKongInterface.DetectShuiKong()
+    class JinSuiGenImp : SendKeyShuiKong
+    {
+        Regex mNetReg = new Regex(@"WindowsForms10\.Window\.8\.app\.(.*)");
+        String mPostFix = null;
+        public JinSuiGenImp() : base() {
+
+        }
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetClassName(IntPtr hWnd,
+                                    StringBuilder lpClassName,
+                                    int nMaxCount
+                                    );
+        public static string GetWindowClassName(IntPtr hWnd)
         {
-            edit_ptr = Win32Locator.locateWindow(edit_loc);
-            if (edit_ptr == IntPtr.Zero)
+            StringBuilder buffer = new StringBuilder(128);
+
+            GetClassName(hWnd, buffer, buffer.Capacity);
+
+            return buffer.ToString();
+        }
+        protected override void AnchWndChangeEvt(IntPtr wnd)
+        {
+            base.AnchWndChangeEvt(wnd);
+            if (wnd == null) return;
+            StringBuilder buffer = new StringBuilder(256);
+            if (GetClassName(wnd, buffer, buffer.Capacity) == 0) return;
+            Match m = mNetReg.Match(buffer.ToString());
+            if (m.Success)
             {
-                Trace.WriteLineIf(Program.trace_sw.TraceInfo, "locate " + edit_loc + " failed");
-                return false;
+                mPostFix = m.Groups[1].Value;
             }
             else {
-                Trace.WriteLineIf(Program.trace_sw.TraceInfo, String.Format("locate {0:s} at {1:x}",edit_loc, edit_ptr));
-                return true;
+                mPostFix = null;
             }
-
         }
-        
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, string lParam);
-        public const uint WM_SETTEXT = 0x000C;
-        bool SendText(int target, string text)
+        protected override string GetWndClassPostFix()
         {
-            if (edit_ptr != IntPtr.Zero) {
-                try {
-                    SendMessage(edit_ptr, WM_SETTEXT, IntPtr.Zero, text);
-                    int res = Marshal.GetLastWin32Error();
-                    if (res != 0) {
-                        Trace.WriteLineIf(Program.trace_sw.TraceError,String.Format("sendmessage with error code:{0:d}", res),"error");
-                        return false;
-                    }
-                } catch (Exception e) {
-                    Trace.WriteLineIf(Program.trace_sw.TraceError,"Send Text Failed with " + e.ToString(),"error");
-                    return false;
-                }
-            }
-            return true;
-        }
-        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        internal static extern Boolean SetForegroundWindow(IntPtr hwnd);
-        Boolean ShuiKongInterface.SendRecipt(CheRequest req) {
-            if (edit_ptr != IntPtr.Zero)
-            {
-                //SendMessage(edit_ptr, WM_SETTEXT, IntPtr.Zero, req.Client);
-                //SetFocus(edit_ptr);
-                SetForegroundWindow(edit_ptr);
-                SendKeys.Send(req.Customer_Text);
-                SendKeys.Send("{ENTER}");//地址
-                SendKeys.Send("佛山市南海大道");//地址
-                SendKeys.Send("{ENTER}");//行业分类
-                SendKeys.Send("汽油");
-                SendKeys.Send("{ENTER}");//开票人
-                SendKeys.Send("{ENTER}");//收款人
-                SendKeys.Send("{ENTER}");//币种
-                SendKeys.Send("人民币");
-                SendKeys.Send("{ENTER}");//备注
-                SendKeys.Send("车到加油打印");
-                SendKeys.Send("{ENTER}");//gride
-                SendKeys.Send("{ENTER}");//税目代码
-                SendKeys.Send("{ENTER}");//税率
-                SendKeys.Send("{ENTER}");//项目
-                SendKeys.Send(req.Product_Code);//收款人
-                SendKeys.Send("{ENTER}");//单位
-                SendKeys.Send("{ENTER}");//数量
-                SendKeys.Send(req.Product_Number);
-                SendKeys.Send("{ENTER}");//单价
-                SendKeys.Send(req.Product_Price);//数量
-                SendKeys.Send("{ENTER}");//金额
-                SendKeys.Send(req.Amount);//数量
-                int res = Marshal.GetLastWin32Error();
-                Trace.WriteLine("SetFocus res " + res.ToString());
-                //SendMessage(edit_ptr,)
-            }
-            return true;
-        }
-
-        public string GetPattern(int target)
-        {
-            return edit_loc;
+            return mPostFix;
         }
     }
+
 }

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Net;
 
 namespace CheDaoLoader
 {
@@ -37,13 +38,13 @@ namespace CheDaoLoader
                 StartAutoUpdate();
             }
 
-            /* if (StartApp() == true)
+            if (StartApp() == true)
             {
                 mNotify = new NotifyIcon();
                 mNotify.Icon = Resource.trayicon;
                 mNotify.Text = "车道加油辅助";
                 mNotify.Visible = true;
-
+                PrepareUpload();
                 mTimer = new Timer();
                 mTimer.Interval = 10000; //execute the task per 10sec
                 mTimer.Tick += MTimer_Tick;
@@ -51,7 +52,55 @@ namespace CheDaoLoader
                 Application.Run();
                 mNotify.Visible = false;
                 mNotify.Dispose();
-            }*/
+            }
+        }
+        static string[] log_files = null;
+        static int cur_upload_index;
+        static WebClient mWorkClient = new WebClient();
+        private static void PrepareUpload()
+        {
+            mWorkClient.UploadDataCompleted += new UploadDataCompletedEventHandler(log_update_done);
+            log_files = Directory.GetFiles("log", "*.log");
+            cur_upload_index = 0;
+            while(log_files != null && log_files.Length > cur_upload_index) {
+                if (kickoff_upload(log_files[cur_upload_index]) == true) break; //success, upload in complete callback when it done.
+                cur_upload_index++;
+            }
+        }
+        private static Boolean kickoff_upload(String fn) {
+            byte[] fileBytes = null;
+            try
+            {
+                FileStream fs = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.Read);
+                fileBytes = new byte[fs.Length];
+                fs.Read(fileBytes, 0, Convert.ToInt32(fs.Length));
+                fs.Close();
+                System.Uri url = new Uri(string.Format("{0:S}?client_id={1:s}&name={2:s}", ConfigurationManager.AppSettings["service_url"] + "log", mAppCode, fn));
+                mWorkClient.UploadDataAsync(url, fileBytes);
+            }
+            catch (Exception e) {
+                return false; // read file failure
+            }
+            return true;
+        }
+
+        private static void log_update_done(object sender, UploadDataCompletedEventArgs e)
+        {
+            if (e.Error == null) {
+                try
+                {
+                    File.Delete(log_files[cur_upload_index]);
+                    cur_upload_index++;
+                    while (log_files != null && log_files.Length > cur_upload_index)
+                    {
+                        if (kickoff_upload(log_files[cur_upload_index]) == true) break; //success, upload in complete callback when it done.
+                        cur_upload_index++;
+                    }
+                }
+                catch (Exception ex){
+                    return;
+                }
+            }
         }
 
         private static Boolean Configure_Check()
@@ -72,12 +121,16 @@ namespace CheDaoLoader
             mAppCode = conf.AppSettings.Settings["client_id"].Value;
             return true;
         }
-
+        static int m10hr_count = 0;
         private static void MTimer_Tick(object sender, EventArgs e)
         {
+            m10hr_count++;
             switch (app_status) {
                 case 1:
                     //check log or ping the process
+                    if (m10hr_count > 6 * 600) {
+                        CheckUpdate();//reuse the function to ping server
+                    }
                     break;
                 case 0:
                     //the app is required to restart

@@ -132,8 +132,8 @@ namespace AutoUpdater
 			try
 			{
 				WebRequest req = WebRequest.Create(this.UpdaterUrl);
-				WebResponse res = req.GetResponse();
-				if(res.ContentLength >0)
+                HttpWebResponse res = (HttpWebResponse) req.GetResponse();
+				if(res.StatusCode == HttpStatusCode.OK)
 				{
 					try
 					{

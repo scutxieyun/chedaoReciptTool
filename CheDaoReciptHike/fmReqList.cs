@@ -224,12 +224,11 @@ namespace CheDaoReciptHike
             }
         }
         private void layoutMainContent() {
-            if (plBanner.Visible)
-                plBanner.Width = this.flMain.Width;
             if (!plBanner.Visible) tcMain.Height = flMain.Height - plInfo.Height - 30;
             else tcMain.Height = flMain.Height - plInfo.Height - this.plBanner.Height - 30;
-            tcMain.Width = this.flMain.Width;
-            plInfo.Width = this.flMain.Width;
+            tcMain.Width = this.flMain.Width - 10;
+            plInfo.Width = this.flMain.Width - 10;
+            return;
         }
 
         private void flMain_Resize(object sender, EventArgs e)
