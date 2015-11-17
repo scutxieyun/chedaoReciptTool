@@ -129,6 +129,7 @@ namespace CheDaoLoader
                 case 1:
                     //check log or ping the process
                     if (mNhr_count > 6 * 120) { //two hours
+                        mNhr_count = 0;
                         CheckUpdate();//reuse the function to ping server
                     }
                     break;
