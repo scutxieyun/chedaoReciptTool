@@ -18,6 +18,7 @@ namespace CheDaoReciptHike
         Boolean DetectShuiKong();
         Boolean SendRecipt(CheRequest req);
         String GetPattern(int target);
+        String TestLocationFunction();
 
     }
 
@@ -40,6 +41,10 @@ namespace CheDaoReciptHike
             if (mInterface != null) return mInterface.GetPattern(target);
             return "Not defined";
         }
+        public static String Test() {
+            if (mInterface != null) return mInterface.TestLocationFunction();
+            return "not defined";
+        }
     }
     class Win32Locator {
         [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
@@ -51,7 +56,7 @@ namespace CheDaoReciptHike
 
         static String wnd_trace; // for debug use
         static public String Dump() {
-            return "Latest window trace record: " + wnd_trace;
+            return Environment.NewLine + "Latest window trace record: " + wnd_trace;
         }
         static public Boolean SetForeGWindow(IntPtr hwnd) {
             Boolean res = false;
@@ -73,7 +78,7 @@ namespace CheDaoReciptHike
             if (nodes.Length == 0) return IntPtr.Zero;
             do {
                 cur = NewFindWindow(cur, nodes[index],ClassPostFix);
-                wnd_trace = String.Format("{0:s} -> {1:X00000}", wnd_trace, cur.ToInt64());
+                wnd_trace = String.Format("{0:s} -> {1:s}@{2:X00000} ", wnd_trace,nodes[index],cur.ToInt64());
                 index++;
             } while (cur != IntPtr.Zero && index < nodes.Length);
             return cur;
@@ -270,6 +275,21 @@ namespace CheDaoReciptHike
             }
             return false;
         }
+
+        String ShuiKongInterface.TestLocationFunction()
+        {
+            String res = "Test:\n Detect " + anch_wnd_str + "\n";
+            ((ShuiKongInterface)this).DetectShuiKong();
+            res += Win32Locator.Dump() + Environment.NewLine;
+            if (this.first_editor_wnd_str != null)
+            {
+                String fix = GetWndClassPostFix() != null ? GetWndClassPostFix() : "";
+                res += "find 1st Editor " + this.first_editor_wnd_str + "with postfix " + fix + Environment.NewLine;
+                Win32Locator.locateWindow(this.first_editor_wnd_str, GetWndClassPostFix());
+                res += Win32Locator.Dump();
+            }
+            return res;
+        }
     }
 
 
@@ -338,6 +358,11 @@ namespace CheDaoReciptHike
                 res = true;
             }
             return res;
+        }
+
+        public String TestLocationFunction()
+        {
+            return "";
         }
     }
 

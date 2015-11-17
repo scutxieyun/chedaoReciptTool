@@ -38,19 +38,18 @@ namespace CheDaoLoader
         }
 
         void AreaInfoUpdate() {
-            if (cbProvince.SelectedItem.ToString() != mCurProvince) {
+            if (cbProvince.SelectedItem != null && cbProvince.SelectedItem.ToString() != mCurProvince) {
                 mCurProvince = cbProvince.SelectedItem.ToString();
                 mCurCity = null;
                 mCurArea = null;
+                this.cbArea.Items.Clear();
                 this.cbCity.Items.Clear();
                 this.cbCity.Items.AddRange(CAreaInfo.GetCities(mCurProvince));
                 this.cbCity.SelectedIndex = 0;
                 //mCurCity = cbCity.SelectedItem.ToString();
-                this.cbArea.Items.Clear();
-                
                 return;
             }
-            if (cbCity.SelectedItem.ToString() != mCurCity) {
+            if (cbCity.SelectedItem != null && cbCity.SelectedItem.ToString() != mCurCity) {
                 mCurCity = cbCity.SelectedItem.ToString();
                 mCurArea = null;
                 this.cbArea.Items.Clear();
@@ -58,7 +57,7 @@ namespace CheDaoLoader
                 this.cbArea.SelectedIndex = 0;
                 return;
             }
-            mCurArea = cbArea.SelectedItem.ToString();
+            if(cbArea.SelectedItem != null) mCurArea = cbArea.SelectedItem.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -94,6 +93,11 @@ namespace CheDaoLoader
                 MessageBox.Show("连接服务失败，请检查网络或联系技术支持 " + ex.Message);
 
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

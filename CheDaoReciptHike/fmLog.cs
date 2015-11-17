@@ -44,6 +44,8 @@ namespace CheDaoReciptHike
             tbLog.AppendText(CheDaoFactory.Dump() + Environment.NewLine);
             tbLog.AppendText(Win32Locator.Dump() + Environment.NewLine);
             tbLog.AppendText(Program.log.Dump() + Environment.NewLine);
+            tbLog.AppendText(ShuiKongFactory.Test() + Environment.NewLine);
+
         }
 
         private void fmLog_Load(object sender, EventArgs e)

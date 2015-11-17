@@ -121,14 +121,14 @@ namespace CheDaoLoader
             mAppCode = conf.AppSettings.Settings["client_id"].Value;
             return true;
         }
-        static int m10hr_count = 0;
+        static int mNhr_count = 0;
         private static void MTimer_Tick(object sender, EventArgs e)
         {
-            m10hr_count++;
+            mNhr_count++;
             switch (app_status) {
                 case 1:
                     //check log or ping the process
-                    if (m10hr_count > 6 * 600) {
+                    if (mNhr_count > 6 * 120) { //two hours
                         CheckUpdate();//reuse the function to ping server
                     }
                     break;
@@ -207,6 +207,7 @@ namespace CheDaoLoader
             if (p.ExitCode == 0)
             {//normal exit
                 app_status = 2;
+                Application.Exit();
             }
             else
             {

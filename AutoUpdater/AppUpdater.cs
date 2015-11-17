@@ -133,8 +133,8 @@ namespace AutoUpdater
 			{
 				WebRequest req = WebRequest.Create(this.UpdaterUrl);
                 HttpWebResponse res = (HttpWebResponse) req.GetResponse();
-				if(res.StatusCode == HttpStatusCode.OK)
-				{
+                if (res.ContentLength > 0)
+                {
 					try
 					{
 						WebClient wClient = new WebClient();
