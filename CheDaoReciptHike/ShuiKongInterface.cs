@@ -261,6 +261,7 @@ namespace CheDaoReciptHike
                     if (f_e != IntPtr.Zero)
                     {
                         Win32Locator.SetForeGWindow(f_e);
+                        //SetFocus(f_e);
                     }
                     else {
                         Trace.WriteLineIf(Program.trace_sw.TraceError,"did not find the window");
@@ -297,7 +298,9 @@ namespace CheDaoReciptHike
     {
 
         Dictionary<String, PropertyInfo> mFieldMap = new Dictionary<String, PropertyInfo>();
-        String mFirstWnd = null;
+        String anch_wnd_str = null;
+        IntPtr anch_wnd_handle = IntPtr.Zero;
+
         public SndMsgShuiKong()
         {
             Object o = ConfigurationManager.GetSection("shuikong_field_maps");
@@ -306,19 +309,27 @@ namespace CheDaoReciptHike
                 PropertyInfo info = typeof(CheRequest).GetProperty(cfg[wnd_str]);
                 if (info != null) {
                     mFieldMap.Add(wnd_str, info);
-                    if (mFirstWnd == null) mFirstWnd = wnd_str; 
+                    if (anch_wnd_str == null) anch_wnd_str = wnd_str; 
                 }
+                if (wnd_str == "shuikong_wnd_path") {
+                    anch_wnd_str = cfg[wnd_str];
+                }
+
             }
         }
         public bool DetectShuiKong()
         {
-            IntPtr tmp = Win32Locator.locateWindow(mFirstWnd,null);
+            IntPtr tmp = Win32Locator.locateWindow(anch_wnd_str, null);
+            if (tmp != anch_wnd_handle) {
+                anch_wnd_handle = tmp;
+                AnchWndChangeEvt(tmp);
+            }
             return tmp != IntPtr.Zero;
         }
 
         public string GetPattern(int target)
         {
-            return mFirstWnd;
+            return anch_wnd_str;
         }
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         internal static extern Boolean SetForegroundWindow(IntPtr hwnd);
@@ -328,15 +339,19 @@ namespace CheDaoReciptHike
         public bool SendRecipt(CheRequest req)
         {
             Boolean res = false;
-            Boolean firstitem = true;
-
+            IntPtr wnd_ptr;
+            if (anch_wnd_handle != null)
+            {
+                Win32Locator.SetForeGWindow(anch_wnd_handle);
+            }
+            else {
+                return false;
+            }
             foreach (String wnd_str in mFieldMap.Keys) {
                 res = false;
                 if (wnd_str != null) {
-                    IntPtr wnd_ptr = Win32Locator.locateWindow(wnd_str,null);
+                    wnd_ptr = Win32Locator.locateWindow(wnd_str, GetWndClassPostFix());
                     if (wnd_ptr == null) break;
-                    if (firstitem) Win32Locator.SetForeGWindow(wnd_ptr);
-                    firstitem = false;
                     String text = mFieldMap[wnd_str].GetValue(req, null).ToString();
                     try
                     {
@@ -362,15 +377,35 @@ namespace CheDaoReciptHike
 
         public String TestLocationFunction()
         {
-            return "";
+            String res = "Test:\n Detect " + anch_wnd_str + "\n";
+            ((ShuiKongInterface)this).DetectShuiKong();
+            res += Win32Locator.Dump() + Environment.NewLine;
+            foreach (String wnd_str in mFieldMap.Keys) {
+                String fix = GetWndClassPostFix() != null ? GetWndClassPostFix() : "";
+                res += "Find " + wnd_str + " with postfix " + fix + Environment.NewLine;
+                Win32Locator.locateWindow(wnd_str, GetWndClassPostFix());
+                res += Win32Locator.Dump();
+            }
+            return res;
         }
+
+        protected virtual void AnchWndChangeEvt(IntPtr wnd)
+        {
+            return;
+        }
+
+        protected virtual String GetWndClassPostFix()
+        {
+            return null;
+        }
+
     }
 
-    class JinSuiGenImp : SendKeyShuiKong
+    class JinSuiGenSendKeyImp : SendKeyShuiKong
     {
         Regex mNetReg = new Regex(@"WindowsForms10\.Window\.8\.app\.(.*)");
         String mPostFix = null;
-        public JinSuiGenImp() : base() {
+        public JinSuiGenSendKeyImp() : base() {
 
         }
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -398,6 +433,48 @@ namespace CheDaoReciptHike
                 mPostFix = m.Groups[1].Value;
             }
             else {
+                mPostFix = null;
+            }
+        }
+        protected override string GetWndClassPostFix()
+        {
+            return mPostFix;
+        }
+    }
+    class JinSuiGenSndMsgImp : SndMsgShuiKong
+    {
+        Regex mNetReg = new Regex(@"WindowsForms10\.Window\.8\.app\.(.*)");
+        String mPostFix = null;
+        public JinSuiGenSndMsgImp() : base()
+        {
+
+        }
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetClassName(IntPtr hWnd,
+                                    StringBuilder lpClassName,
+                                    int nMaxCount
+                                    );
+        public static string GetWindowClassName(IntPtr hWnd)
+        {
+            StringBuilder buffer = new StringBuilder(128);
+
+            GetClassName(hWnd, buffer, buffer.Capacity);
+
+            return buffer.ToString();
+        }
+        protected override void AnchWndChangeEvt(IntPtr wnd)
+        {
+            base.AnchWndChangeEvt(wnd);
+            if (wnd == null) return;
+            StringBuilder buffer = new StringBuilder(256);
+            if (GetClassName(wnd, buffer, buffer.Capacity) == 0) return;
+            Match m = mNetReg.Match(buffer.ToString());
+            if (m.Success)
+            {
+                mPostFix = m.Groups[1].Value;
+            }
+            else
+            {
                 mPostFix = null;
             }
         }

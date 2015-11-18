@@ -332,13 +332,14 @@ namespace AutoUpdate
 		bool isRun = false;
 		string mainAppExe = "";
         Hashtable htUpdateFile = null;
+        static string url_postfix = "";
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
 		static void Main() 
 		{
-			
+            if (Environment.GetCommandLineArgs().Length > 1) url_postfix = "?" + Environment.GetCommandLineArgs()[1];
 			Application.Run(new FrmUpdate());
 		}
 
@@ -372,7 +373,7 @@ namespace AutoUpdate
 			updateUrl = updaterXmlFiles.GetNodeValue("//Url");
 
 			AppUpdater appUpdater = new AppUpdater();
-			appUpdater.UpdaterUrl = updateUrl + "/UpdateList.xml";
+			appUpdater.UpdaterUrl = updateUrl + "/UpdateList.xml" + url_postfix;
 
 			//与服务器连接,下载更新配置文件
 			try
@@ -453,7 +454,7 @@ namespace AutoUpdate
 			for(int i = 0;i < htUpdateFile.Count;i++)
 			{
                 string UpdateFile = ((string[])htUpdateFile[i])[0].Trim();
-                string updateFileUrl = updateUrl + UpdateFile;
+                string updateFileUrl = updateUrl + UpdateFile + url_postfix;
 				long fileLength = 0;
 				try
 				{	

@@ -8,10 +8,11 @@
   	<Application applicationId="CheDaoReciptHike">
     		<EntryPoint>CheDaoReciptHike.exe</EntryPoint>
     		<Location>.</Location>
-    		<Version>1.3</Version>
+    		<Version>1.4</Version>
   	</Application>
   	<Files>
-	   	 <File Ver="1.3" Name="CheDaoReciptHike.exe"/>
-		 <File Ver="1.3" Name="Common.xml"/>
+	   	 <File Ver="1.4" Name="CheDaoReciptHike.exe"/>
+		 <File Ver="1.4" Name="Common.xml"/>
+		 <File Ver="1.4" Name="CheDaoReciptHike.exe.config"/>
   	</Files>
 </AutoUpdater>
