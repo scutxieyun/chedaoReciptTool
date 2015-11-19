@@ -261,7 +261,7 @@ namespace CheDaoReciptHike
                     if (f_e != IntPtr.Zero)
                     {
                         Win32Locator.SetForeGWindow(f_e);
-                        //SetFocus(f_e);
+                        //SetFocus(f_e); the method doesn't work
                     }
                     else {
                         Trace.WriteLineIf(Program.trace_sw.TraceError,"did not find the window");
