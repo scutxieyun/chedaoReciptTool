@@ -12,6 +12,7 @@ namespace CheDaoReciptHike
     public abstract class CheDaoInterface {
         public const short data_validation = 1;
         public const short scan_print = 2;
+        public const short manual_print = 3;
         public const short print_confirm = 10;  //internal use only
         public const short delete_cmd = 11;//internal use only
         public const short clean_cmd = 12;// internal use only
@@ -166,7 +167,7 @@ namespace CheDaoReciptHike
     {
         String _Order_Number;
         ChePActionRequest(String str,long create_time) {
-            this.message_type = CheDaoInterface.print_confirm;
+            this.message_type = CheDaoInterface.manual_print;
             _Order_Number = str;
             this.create_time = create_time;
         }
@@ -356,7 +357,7 @@ namespace CheDaoReciptHike
                 Invoice_Request_Count++;
                 return CheRequest.create(p.rawXML,p.time_ticks);
             }
-            if (p.msg_type == CheDaoInterface.scan_print) {
+            if (p.msg_type == CheDaoInterface.scan_print || p.msg_type == CheDaoInterface.manual_print) {
                 Print_Request_Count++;
                 return ChePrintRequest.create(p.rawXML,p.time_ticks);
             }
@@ -417,6 +418,7 @@ namespace CheDaoReciptHike
                         Trace.WriteLineIf(Program.trace_sw.TraceVerbose, "clean up the internal cache and bypass " + bypass_counter.ToString());
                         break;
                     case CheDaoInterface.scan_print:
+                    case CheDaoInterface.manual_print:
                         lock (mPendingList)
                         {
                             ChePrintRequest p_item = (ChePrintRequest)msg;

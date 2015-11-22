@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 using CheDaoReciptHike.Properties;
@@ -59,7 +57,7 @@ namespace CheDaoReciptHike
         static int lifetime_of_req = 60;
         static int port;
         static public void init() {
-            String str = System.Configuration.ConfigurationManager.AppSettings["port"];
+            String str = "3344";// System.Configuration.ConfigurationManager.AppSettings["port"];
             if (str != null)
             {
                 if (!int.TryParse(str, out port)) port = 3344;

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CheDaoReciptHike
@@ -27,7 +25,7 @@ namespace CheDaoReciptHike
         public static void init(){
             String shuikong_name = ConfigurationManager.AppSettings["shuikong_interface"];
             if (shuikong_name == null) shuikong_name = "CheDaoReciptHike.SendKeyShuiKong";
-            mInterface = (ShuiKongInterface) Activator.CreateInstance(TypeInfo.GetType(shuikong_name));
+            mInterface = (ShuiKongInterface)new CheDaoReciptHike.SndMsgShuiKong();
         }
         public static Boolean DetectShuiKong() {
             if (mInterface != null) return mInterface.DetectShuiKong();
