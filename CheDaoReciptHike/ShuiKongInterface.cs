@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using WndInteract;
 
 namespace CheDaoReciptHike
 {
@@ -25,7 +26,25 @@ namespace CheDaoReciptHike
         public static void init(){
             String shuikong_name = ConfigurationManager.AppSettings["shuikong_interface"];
             if (shuikong_name == null) shuikong_name = "CheDaoReciptHike.SendKeyShuiKong";
-            mInterface = (ShuiKongInterface)new CheDaoReciptHike.SndMsgShuiKong();
+            //SndMsgShuiKong SendKeyShuiKong, JinSuiGenSendKeyImp, JinSuiGenSndMsgImp
+            switch (shuikong_name) {
+                case "CheDaoReciptHike.SendKeyShuiKong":
+                    mInterface = (ShuiKongInterface)new CheDaoReciptHike.SendKeyShuiKong();
+                    break;
+                case "CheDaoReciptHike.SndMsgShuiKong":
+                    mInterface = (ShuiKongInterface)new CheDaoReciptHike.SendKeyShuiKong();
+                    break;
+                case "JinSuiGenSendKeyImp":
+                    mInterface = new CheDaoReciptHike.JinSuiGenSendKeyImp();
+                    break;
+                case "JinSuiGenSndMsgImp":
+                    mInterface = new CheDaoReciptHike.JinSuiGenSndMsgImp();
+                    break;
+                default:
+                    mInterface = null;
+                    Trace.WriteLineIf(Program.trace_sw.TraceError, "Missed Shuikong Inteface [shuikong_interface]参数");
+                    break;
+            }
         }
         public static Boolean DetectShuiKong() {
             if (mInterface != null) return mInterface.DetectShuiKong();
@@ -44,84 +63,7 @@ namespace CheDaoReciptHike
             return "not defined";
         }
     }
-    class Win32Locator {
-        [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
-        private static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-        [DllImport("user32.dll", EntryPoint = "FindWindow")]
-        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        internal static extern Boolean SetForegroundWindow(IntPtr hwnd);
-
-        static String wnd_trace; // for debug use
-        static public String Dump() {
-            return Environment.NewLine + "Latest window trace record: " + wnd_trace;
-        }
-        static public Boolean SetForeGWindow(IntPtr hwnd) {
-            Boolean res = false;
-            if (hwnd != IntPtr.Zero) {
-                res = SetForegroundWindow(hwnd);
-                if (res == false) {
-                    Trace.WriteLineIf(Program.trace_sw.TraceError, "set to foreground failed");
-                }
-            }
-            return false;
-        }
-
-        static public IntPtr locateWindow(String path,String ClassPostFix)
-        {
-            String[] nodes = path.Split(new Char[] { '/' });
-            wnd_trace = "";
-            IntPtr cur = IntPtr.Zero; // desktop
-            int index = 0;
-            if (nodes.Length == 0) return IntPtr.Zero;
-            do {
-                cur = NewFindWindow(cur, nodes[index],ClassPostFix);
-                wnd_trace = String.Format("{0:s} -> {1:s}@{2:X00000} ", wnd_trace,nodes[index],cur.ToInt64());
-                index++;
-            } while (cur != IntPtr.Zero && index < nodes.Length);
-            return cur;
-        }
-        static IntPtr NewFindWindow(IntPtr p, String f,String ClassPostFix)
-        {
-            Regex reg = new Regex(@"([S|T])\((.*)\)\x5b(\d+)\x5d");
-            Match m = reg.Match(f);
-            String WndClass = null;
-            String WndName = null;
-            IntPtr res = IntPtr.Zero;
-            IntPtr cur_child = IntPtr.Zero;
-            int WndIndex = 0;
-            if (ClassPostFix == null) ClassPostFix = "";
-            if (m.Success) {
-                if (m.Groups[1].Value == "T")
-                {
-                    WndClass = m.Groups[2].Value == "" ? null : m.Groups[2].Value + ClassPostFix;
-                }
-                if (m.Groups[1].Value == "S") {
-                    WndName = m.Groups[2].Value == "" ? null : m.Groups[2].Value;
-                }
-                int.TryParse(m.Groups[3].Value, out WndIndex);
-                int cur_index = 0;
-                do
-                {
-                    cur_child = FindWindowEx(p, cur_child, WndClass, WndName);
-                    cur_index++;
-                } while (cur_child != IntPtr.Zero && cur_index <= WndIndex);
-                res = cur_child;
-            }
-            return res;
-        }
-        static private String getQuotedString(String in_str)
-        {
-            Regex reg = new Regex(@"""([^""\\]*)""");
-            Match m = reg.Match(in_str);
-            if (m.Success)
-            {
-                return m.Groups[1].Value;
-            }
-            return null;
-        }
-
-    }
+    
 
     class SendKeyShuiKong : ShuiKongInterface
     {

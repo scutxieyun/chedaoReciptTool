@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.lsReqs = new System.Windows.Forms.ListView();
-            this.tran_time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.GasPortNo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ClientInfo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Amount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -45,7 +44,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lsDone = new System.Windows.Forms.ListView();
-            this.done_tran_time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.done_tran_info = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.done_ClientInfo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.done1_Amount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -55,8 +53,8 @@
             this.cbTopMost = new System.Windows.Forms.CheckBox();
             this.plInfo = new System.Windows.Forms.Panel();
             this.flMain = new System.Windows.Forms.FlowLayoutPanel();
-            this.lbBanner = new System.Windows.Forms.Label();
             this.plBanner = new System.Windows.Forms.Panel();
+            this.lbBanner = new System.Windows.Forms.Label();
             this.cmList.SuspendLayout();
             this.tcMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -72,39 +70,35 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lsReqs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.tran_time,
             this.GasPortNo,
             this.ClientInfo,
             this.Amount});
             this.lsReqs.ContextMenuStrip = this.cmList;
+            this.lsReqs.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lsReqs.FullRowSelect = true;
+            this.lsReqs.GridLines = true;
             this.lsReqs.HideSelection = false;
             this.lsReqs.HoverSelection = true;
             this.lsReqs.Location = new System.Drawing.Point(5, 5);
             this.lsReqs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lsReqs.MultiSelect = false;
             this.lsReqs.Name = "lsReqs";
-            this.lsReqs.Size = new System.Drawing.Size(620, 262);
+            this.lsReqs.Size = new System.Drawing.Size(411, 262);
             this.lsReqs.TabIndex = 1;
             this.lsReqs.UseCompatibleStateImageBehavior = false;
             this.lsReqs.View = System.Windows.Forms.View.Details;
             this.lsReqs.DoubleClick += new System.EventHandler(this.lsReqs_DoubleClick);
             this.lsReqs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.lsReqs_KeyPress);
             // 
-            // tran_time
-            // 
-            this.tran_time.Text = "交易时间";
-            this.tran_time.Width = 124;
-            // 
             // GasPortNo
             // 
             this.GasPortNo.Text = "交易信息";
-            this.GasPortNo.Width = 245;
+            this.GasPortNo.Width = 160;
             // 
             // ClientInfo
             // 
             this.ClientInfo.Text = "客户";
-            this.ClientInfo.Width = 200;
+            this.ClientInfo.Width = 164;
             // 
             // Amount
             // 
@@ -174,10 +168,10 @@
             this.tcMain.Controls.Add(this.tabPage1);
             this.tcMain.Controls.Add(this.tabPage2);
             this.tcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tcMain.Location = new System.Drawing.Point(3, 74);
+            this.tcMain.Location = new System.Drawing.Point(4, 64);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(633, 291);
+            this.tcMain.Size = new System.Drawing.Size(425, 291);
             this.tcMain.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tcMain.TabIndex = 6;
             this.tcMain.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tcMain_DrawItem);
@@ -189,7 +183,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage1.Size = new System.Drawing.Size(625, 265);
+            this.tabPage1.Size = new System.Drawing.Size(417, 265);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "待打印";
             // 
@@ -199,7 +193,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage2.Size = new System.Drawing.Size(2, 265);
+            this.tabPage2.Size = new System.Drawing.Size(417, 265);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "已打印";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -211,26 +205,21 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lsDone.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.done_tran_time,
             this.done_tran_info,
             this.done_ClientInfo,
             this.done1_Amount,
             this.print_time});
             this.lsDone.FullRowSelect = true;
             this.lsDone.GridLines = true;
-            this.lsDone.Location = new System.Drawing.Point(7, 3);
+            this.lsDone.HideSelection = false;
+            this.lsDone.Location = new System.Drawing.Point(5, 3);
             this.lsDone.MultiSelect = false;
             this.lsDone.Name = "lsDone";
-            this.lsDone.Size = new System.Drawing.Size(607, 257);
+            this.lsDone.Size = new System.Drawing.Size(410, 257);
             this.lsDone.TabIndex = 0;
             this.lsDone.UseCompatibleStateImageBehavior = false;
             this.lsDone.View = System.Windows.Forms.View.Details;
             this.lsDone.DoubleClick += new System.EventHandler(this.lsDone_DoubleClick);
-            // 
-            // done_tran_time
-            // 
-            this.done_tran_time.Text = "交易时间";
-            this.done_tran_time.Width = 110;
             // 
             // done_tran_info
             // 
@@ -261,16 +250,16 @@
             // lbskStatus
             // 
             this.lbskStatus.AutoSize = true;
-            this.lbskStatus.Location = new System.Drawing.Point(155, 7);
+            this.lbskStatus.Location = new System.Drawing.Point(163, 7);
             this.lbskStatus.Name = "lbskStatus";
-            this.lbskStatus.Size = new System.Drawing.Size(101, 12);
+            this.lbskStatus.Size = new System.Drawing.Size(65, 12);
             this.lbskStatus.TabIndex = 7;
-            this.lbskStatus.Text = "税控状态: 无连接";
+            this.lbskStatus.Text = "最近操作: ";
             // 
             // cbTopMost
             // 
             this.cbTopMost.AutoSize = true;
-            this.cbTopMost.Location = new System.Drawing.Point(297, 7);
+            this.cbTopMost.Location = new System.Drawing.Point(9, 21);
             this.cbTopMost.Name = "cbTopMost";
             this.cbTopMost.Size = new System.Drawing.Size(96, 16);
             this.cbTopMost.TabIndex = 9;
@@ -286,9 +275,9 @@
             this.plInfo.Controls.Add(this.cbTopMost);
             this.plInfo.Controls.Add(this.lbStatus);
             this.plInfo.Controls.Add(this.lbskStatus);
-            this.plInfo.Location = new System.Drawing.Point(3, 371);
+            this.plInfo.Location = new System.Drawing.Point(3, 361);
             this.plInfo.Name = "plInfo";
-            this.plInfo.Size = new System.Drawing.Size(633, 29);
+            this.plInfo.Size = new System.Drawing.Size(427, 51);
             this.plInfo.TabIndex = 7;
             // 
             // flMain
@@ -304,9 +293,18 @@
             this.flMain.Location = new System.Drawing.Point(8, 8);
             this.flMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.flMain.Name = "flMain";
-            this.flMain.Size = new System.Drawing.Size(639, 404);
+            this.flMain.Size = new System.Drawing.Size(433, 417);
             this.flMain.TabIndex = 8;
             this.flMain.Resize += new System.EventHandler(this.flMain_Resize);
+            // 
+            // plBanner
+            // 
+            this.plBanner.Controls.Add(this.lbBanner);
+            this.plBanner.Location = new System.Drawing.Point(2, 2);
+            this.plBanner.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plBanner.Name = "plBanner";
+            this.plBanner.Size = new System.Drawing.Size(429, 57);
+            this.plBanner.TabIndex = 8;
             // 
             // lbBanner
             // 
@@ -320,20 +318,11 @@
             this.lbBanner.TabIndex = 0;
             this.lbBanner.Text = "label1";
             // 
-            // plBanner
-            // 
-            this.plBanner.Controls.Add(this.lbBanner);
-            this.plBanner.Location = new System.Drawing.Point(2, 2);
-            this.plBanner.Margin = new System.Windows.Forms.Padding(2);
-            this.plBanner.Name = "plBanner";
-            this.plBanner.Size = new System.Drawing.Size(635, 67);
-            this.plBanner.TabIndex = 8;
-            // 
             // fmReqList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(646, 420);
+            this.ClientSize = new System.Drawing.Size(443, 433);
             this.Controls.Add(this.flMain);
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
@@ -370,7 +359,6 @@
         private System.Windows.Forms.ListView lsDone;
         private System.Windows.Forms.Timer timer_1min;
         private System.Windows.Forms.Label lbskStatus;
-        private System.Windows.Forms.ColumnHeader done_tran_time;
         private System.Windows.Forms.ColumnHeader done_tran_info;
         private System.Windows.Forms.ColumnHeader done_ClientInfo;
         private System.Windows.Forms.ColumnHeader done1_Amount;
@@ -378,7 +366,6 @@
         private System.Windows.Forms.ColumnHeader print_time;
         private System.Windows.Forms.Panel plInfo;
         private System.Windows.Forms.FlowLayoutPanel flMain;
-        private System.Windows.Forms.ColumnHeader tran_time;
         private System.Windows.Forms.ContextMenuStrip cmList;
         private System.Windows.Forms.ToolStripMenuItem tsItemPrint;
         private System.Windows.Forms.ToolStripMenuItem tsItemDelete;

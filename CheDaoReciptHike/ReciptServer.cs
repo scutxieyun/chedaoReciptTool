@@ -57,7 +57,7 @@ namespace CheDaoReciptHike
             Trace.TraceInformation("new connect comming from " + peer.RemoteEndPoint.ToString());
             mRemoteInfo = peer.RemoteEndPoint.ToString();
             gPacketHandle.reset();
-            Program.UpdateStatus(peer.RemoteEndPoint.ToString());
+            Program.UpdateStatus(((IPEndPoint)peer.RemoteEndPoint).Address.ToString());
         }
         public void close() {
             if(peer != null) peer.Close();

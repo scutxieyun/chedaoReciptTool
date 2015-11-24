@@ -47,7 +47,7 @@ namespace ReciptGen
             req.Amount = "100";
             req.LicenseNumber = "粤AXX434";
             req.Time = DateTime.Now.ToString();
-            req.Pump_Numer = "3";
+            req.Pump_Number = "3";
             ChePrintRequest p_req = new ChePrintRequest();
             p_req.Order_Number = order_no;
             p_req.Print_Type = "1";

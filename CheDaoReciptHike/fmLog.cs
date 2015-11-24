@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using WndInteract;
 
 
 namespace CheDaoReciptHike
@@ -42,7 +43,7 @@ namespace CheDaoReciptHike
             tbLog.AppendText(CheDaoFactory.Dump() + Environment.NewLine);
             tbLog.AppendText(Win32Locator.Dump() + Environment.NewLine);
             tbLog.AppendText(Program.log.Dump() + Environment.NewLine);
-            tbLog.AppendText(ShuiKongFactory.Test() + Environment.NewLine);
+            //tbLog.AppendText(ShuiKongFactory.Test() + Environment.NewLine);
 
         }
 

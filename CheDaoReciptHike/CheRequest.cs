@@ -60,7 +60,7 @@ namespace CheDaoReciptHike
         [XmlElementAttribute("Organ_Numer")]
         public string Organ_Number { get; set; }
         [XmlElementAttribute("Pump_Number")]
-        public string Pump_Numer { get; set; }
+        public string Pump_Number { get; set; }
         [XmlElementAttribute("Amount")]
         public string Amount { get; set; }
         [XmlElementAttribute("Discount_Type")]
@@ -146,13 +146,14 @@ namespace CheDaoReciptHike
                                 "<Time>{2:s}</Time ><Result_Detail></Result_Detail></Invoice_Response>",
                                 this.Order_Number,this.Result,DateTime.Now);
         }
-        public static ChePrintRequest create(string str,long create_time)
+        public static ChePrintRequest create(int msg_type,string str,long create_time)
         {
             XmlDocument doc = new XmlDocument();
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(ChePrintRequest));
             try
             {
                 ChePrintRequest o = (ChePrintRequest)xmlSerializer.Deserialize(new StringReader(str));
+                o.message_type = msg_type;
                 o.create_time = create_time;
                 return o;
             }
@@ -163,11 +164,12 @@ namespace CheDaoReciptHike
             }
         }
     }
+    /**打印成功*/
     public class ChePActionRequest : CheDaoInterface
     {
         String _Order_Number;
         ChePActionRequest(String str,long create_time) {
-            this.message_type = CheDaoInterface.manual_print;
+            this.message_type = CheDaoInterface.print_confirm;
             _Order_Number = str;
             this.create_time = create_time;
         }
@@ -359,7 +361,7 @@ namespace CheDaoReciptHike
             }
             if (p.msg_type == CheDaoInterface.scan_print || p.msg_type == CheDaoInterface.manual_print) {
                 Print_Request_Count++;
-                return ChePrintRequest.create(p.rawXML,p.time_ticks);
+                return ChePrintRequest.create(p.msg_type,p.rawXML,p.time_ticks);
             }
             if (p.msg_type == CheDaoInterface.print_confirm) {
                 Print_Act_Count++;

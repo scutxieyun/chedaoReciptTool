@@ -24,10 +24,11 @@ namespace CheDaoReciptHike
             log = new fmLog();
             this.AddOwnedForm(log);
             InitializeComponent();
-            ShuiKongFactory.init();
+            if(NewShuiKongInterface.init() != 0) MessageBox.Show("税控脚本初始化失败 " + NewShuiKongInterface.getLastError());
+            /*ShuiKongFactory.init();
             if (ShuiKongFactory.DetectShuiKong() == true) {
                 this.lbskStatus.Text = "税控状态:连接中";
-            }
+            }*/
             
         }
 
@@ -80,12 +81,11 @@ namespace CheDaoReciptHike
             if (DateTime.TryParse(req.Time,out tran_date) == false) {
                 tran_date = DateTime.Now;
             }
-            ListViewItem lvi = new ListViewItem(new String[] { tran_date.ToShortTimeString()});
+            String brief_info = String.Format("{0:s} {1:s} 油枪{2:s}加{3:s}油{4:s}升", tran_date.ToShortTimeString(),req.LicenseNumber, req.Pump_Number, req.Product_Code, req.Product_Number);
+            ListViewItem lvi = new ListViewItem(new String[] { brief_info});
             lvi.Name = req.Order_Number;    /** it is key to search the item*/
             //lvi.ImageIndex = i;     //todo
             //lvi.Text = req.Order_Number;
-            String brief_info = String.Format("{0:s} 油枪{1:s}加{2:s}油{3:s}升", req.LicenseNumber, req.Pump_Numer, req.Product_Code, req.Product_Number);
-            lvi.SubItems.Add(brief_info);
             lvi.SubItems.Add(req.Customer_Text);
             lvi.SubItems.Add(req.Amount);
             lvi.Tag = req;
@@ -102,14 +102,14 @@ namespace CheDaoReciptHike
         private void timer_1min_Tick(object sender, EventArgs e)
         {
 
-            if (ShuiKongFactory.DetectShuiKong() == true)
+            /*if (ShuiKongFactory.DetectShuiKong() == true)
             {
                 this.lbskStatus.Text = "税控状态:连接中";
             }
             else
             {
                 this.lbskStatus.Text = "税控状态:无连接";
-            }
+            }*/
 
             m60mCounter++;
             if (m60mCounter >= AppConfig.GetLifeTimeOfRec()/2) {
@@ -141,20 +141,15 @@ namespace CheDaoReciptHike
             CheRequest req = (CheRequest)act_item.Tag;
             if (req != null)
             {
-                if (ShuiKongFactory.DetectShuiKong() == true)
+                int res;
+                if ((res = NewShuiKongInterface.SendRecipt(req)) != 0)
                 {
-                    try
-                    {
-                        if (ShuiKongFactory.SendRecipt(req) == true)
-                            CheDaoFactory.Handle_Internal_Package(CheDaoInterface.print_confirm, Encoding.UTF8.GetBytes(req.Order_Number));
-                    }
-                    catch (Exception ex) {
-                        MessageBox.Show("推送消息失败" + ex.Message);
-                    }
+                    MessageBox.Show(String.Format("税控脚本执行错误，错误码:{0:d} {1:s}", res,NewShuiKongInterface.getLastError()));
+                    lbskStatus.Text = "最近操作：" + NewShuiKongInterface.getLastError();
                 }
-                else
-                {
-                    MessageBox.Show("无法检测到税控软件");
+                else {
+                    CheDaoFactory.Handle_Internal_Package(CheDaoInterface.print_confirm, Encoding.UTF8.GetBytes(req.Order_Number));
+                    lbskStatus.Text = "最近操作：成功";
                 }
             }
         }
@@ -255,15 +250,17 @@ namespace CheDaoReciptHike
             CheRequest req = (CheRequest)act_item.Tag;
             if (req != null)
             {
-                if (ShuiKongFactory.DetectShuiKong() == true)
+                if (MessageBox.Show("重新打印已打印记录", "重新打印", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
+                int res;
+                if ((res = NewShuiKongInterface.SendRecipt(req)) != 0)
                 {
-                    if (MessageBox.Show("重新打印已打印记录", "重新打印", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
-                    ShuiKongFactory.SendRecipt(req);
+                    MessageBox.Show(String.Format("税控脚本执行错误，错误码:{0:d} {1:s}", res, NewShuiKongInterface.getLastError()));
+                    lbskStatus.Text = "最近操作：" + NewShuiKongInterface.getLastError();
                 }
-                else
-                {
-                    MessageBox.Show("无法检测到税控软件");
+                else {
+                    lbskStatus.Text = "最近操作：成功";
                 }
+               
             }
         }
 

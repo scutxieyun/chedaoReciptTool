@@ -8,6 +8,12 @@ AutoUpdate/obj/**
 AutoUpdate/bin/**
 CheDaoLoader/bin/**
 CheDaoLoader/obj/**
+MouseKeyboardLibrary/bin/**
+MouseKeyboardLibrary/obj/**
+GlobalMacroRecorder/bin/**
+GlobalMacroRecorder/obj/**
+WndInteract/obj/**
+WndInteract/bin/**
 bin/*.pdb
 bin/*.vshost.*
 *.log
