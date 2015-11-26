@@ -49,6 +49,7 @@
             this.cbMainWnd = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.lbLayout = new System.Windows.Forms.Label();
+            this.btCapture = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // recordStartButton
@@ -242,11 +243,22 @@
             this.lbLayout.TabIndex = 20;
             this.lbLayout.Text = "...";
             // 
+            // btCapture
+            // 
+            this.btCapture.Location = new System.Drawing.Point(8, 419);
+            this.btCapture.Name = "btCapture";
+            this.btCapture.Size = new System.Drawing.Size(75, 23);
+            this.btCapture.TabIndex = 21;
+            this.btCapture.Text = "截屏";
+            this.btCapture.UseVisualStyleBackColor = true;
+            this.btCapture.Click += new System.EventHandler(this.btCapture_Click);
+            // 
             // MacroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(355, 443);
+            this.Controls.Add(this.btCapture);
             this.Controls.Add(this.lbLayout);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.cbMainWnd);
@@ -296,6 +308,7 @@
         private System.Windows.Forms.ComboBox cbMainWnd;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lbLayout;
+        private System.Windows.Forms.Button btCapture;
     }
 }
 

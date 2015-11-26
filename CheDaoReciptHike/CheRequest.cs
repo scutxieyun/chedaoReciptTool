@@ -141,7 +141,7 @@ namespace CheDaoReciptHike
         }
         public override string Response()
         {
-            return String.Format("<? xml version =\"1.0\" encoding=\"utf-8\" ?>" + 
+            return String.Format("<?xml version =\"1.0\" encoding=\"utf-8\" ?>" + 
                                 "<Invoice_Response Order_Number=\"{0:s}\" Result=\"{1:d}\">" + 
                                 "<Time>{2:s}</Time ><Result_Detail></Result_Detail></Invoice_Response>",
                                 this.Order_Number,this.Result,DateTime.Now);

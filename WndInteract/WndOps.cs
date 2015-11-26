@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -225,6 +226,22 @@ namespace WndInteract
             {
                 Trace.WriteLine("Send Text Failed with " + e.ToString(), "error");
                 return false;
+            }
+        }
+
+        public static Bitmap CaptureScreen()
+        {
+            try
+            {
+                Rectangle resolution = Screen.PrimaryScreen.Bounds;
+                Bitmap bitmap = new Bitmap(resolution.Width, resolution.Height);
+                Graphics g = Graphics.FromImage(bitmap);
+                g.CopyFromScreen(new Point(0, 0), new Point(0, 0), resolution.Size);
+                return bitmap;
+            }
+            catch (Exception e) {
+                Trace.Write("截屏错误 " + e.Message);
+                return null;
             }
         }
     }

@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace GlobalMacroRecorder
 {
@@ -453,6 +454,22 @@ namespace GlobalMacroRecorder
                 }
             }
             Win32Locator.KickOffEnumWindows();
+        }
+
+        private void btCapture_Click(object sender, EventArgs e)
+        {
+            Bitmap bp = Win32Locator.CaptureScreen();
+            if (bp != null)
+            {
+                try
+                {
+                    bp.Save("shuikong-screen.bmp", ImageFormat.Bmp);
+                    MessageBox.Show("屏幕信息保存在 shuikong-screen.bmp, 请发送给技术部门分析");
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("保存失败 " + ex.Message);
+                }
+            }
         }
     }
 
