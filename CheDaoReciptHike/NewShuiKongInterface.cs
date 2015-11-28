@@ -13,6 +13,7 @@ namespace CheDaoReciptHike
             status = -1;
             if(ScriptExecuter.readScript("chedaoshuikong_cfg.txt") != true) return -1;
             status = 0;
+            ScriptExecuter.debug_level = Program.trace_sw.Level;
             return 0;
         }
         public static int SendRecipt(CheRequest req) {

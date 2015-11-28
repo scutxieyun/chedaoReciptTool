@@ -15,6 +15,7 @@ namespace WndInteract
         static List<CmdDefintion> mCmdList = new List<CmdDefintion>();
         static String Last_Error = "NO";
         static public TraceLevel debug_level = TraceLevel.Error;
+        static Dictionary<String, String> replace_list = new Dictionary<string, string>();
         static public String getLastError() {
             return Last_Error;
         }
@@ -116,7 +117,11 @@ namespace WndInteract
                 case "CheckResolution":
                     func = new CheckResolutionFunction(args);
                     break;
+                case "ReplaceString":
+                    func = new ReplaceStringFunction(args);
+                    break;
                 default:
+                    Trace.WriteLine("no cmd know" + func_name);
                     break;
             }
             return func;
@@ -213,7 +218,7 @@ namespace WndInteract
                     try
                     {
                         SendKeys.SendWait(value);
-                        Trace.WriteLine("发送 " + value);
+                        Trace.WriteLineIf(ScriptExecuter.debug_level >= TraceLevel.Info,"发送 " + value);
                     }
                     catch (Exception e) {
                         Last_Error = "SendInput 错误 " + e.Message;
@@ -250,8 +255,10 @@ namespace WndInteract
                 {
                     try
                     {
+                        System.Windows.Forms.Clipboard.Clear();
+                        Thread.Sleep(10);
                         System.Windows.Forms.Clipboard.SetText(value);
-                        Trace.WriteLine("拷贝 " + value);
+                        Trace.WriteLineIf(ScriptExecuter.debug_level >= TraceLevel.Info,"拷贝 " + value);
                     }
                     catch (Exception e) {
                         Last_Error = "CopyClipBoard 错误 " + e.Message;
@@ -338,7 +345,7 @@ namespace WndInteract
                 }
                 if (value != null)
                 {
-                    Trace.WriteLine("Send Message " + value);
+                    Trace.WriteLineIf(ScriptExecuter.debug_level > TraceLevel.Info,"Send Message " + value);
                     if(Win32Locator.SendWndMessage(wnd_ptr, value)) return true;
                     Last_Error = "发送消息失败";
                     Trace.WriteLine(Last_Error);
@@ -399,6 +406,27 @@ namespace WndInteract
                     Last_Error = "屏幕参数错误";
                     return false;
                 }
+            }
+        }
+        private class ReplaceStringFunction : ScriptFunction {
+            String field;
+            String source_string;
+            string dest_string;
+            public ReplaceStringFunction(String args) {
+                String[] pv = args.Split(',');
+                if (pv.Length == 3) {
+                    field = pv[0];
+                    source_string = pv[1];
+                    dest_string = pv[2];
+                }
+            }
+            public bool execute(Dictionary<String, String> pv) {
+                if (pv.ContainsKey(field)) {
+                    if (pv[field] == source_string) {
+                        pv[field] = dest_string;
+                    }
+                }
+                return true;
             }
         }
     }
