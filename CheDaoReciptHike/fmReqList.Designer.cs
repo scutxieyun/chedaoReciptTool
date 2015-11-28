@@ -52,38 +52,33 @@
             this.lbskStatus = new System.Windows.Forms.Label();
             this.cbTopMost = new System.Windows.Forms.CheckBox();
             this.plInfo = new System.Windows.Forms.Panel();
-            this.flMain = new System.Windows.Forms.FlowLayoutPanel();
-            this.plBanner = new System.Windows.Forms.Panel();
-            this.lbBanner = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.cmList.SuspendLayout();
             this.tcMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.plInfo.SuspendLayout();
-            this.flMain.SuspendLayout();
-            this.plBanner.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lsReqs
             // 
-            this.lsReqs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.lsReqs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.GasPortNo,
             this.ClientInfo,
             this.Amount});
             this.lsReqs.ContextMenuStrip = this.cmList;
-            this.lsReqs.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lsReqs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsReqs.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lsReqs.FullRowSelect = true;
             this.lsReqs.GridLines = true;
             this.lsReqs.HideSelection = false;
             this.lsReqs.HoverSelection = true;
-            this.lsReqs.Location = new System.Drawing.Point(5, 5);
-            this.lsReqs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lsReqs.Location = new System.Drawing.Point(3, 3);
+            this.lsReqs.Margin = new System.Windows.Forms.Padding(2);
             this.lsReqs.MultiSelect = false;
             this.lsReqs.Name = "lsReqs";
-            this.lsReqs.Size = new System.Drawing.Size(411, 262);
+            this.lsReqs.Size = new System.Drawing.Size(348, 155);
             this.lsReqs.TabIndex = 1;
             this.lsReqs.UseCompatibleStateImageBehavior = false;
             this.lsReqs.View = System.Windows.Forms.View.Details;
@@ -155,7 +150,7 @@
             // lbStatus
             // 
             this.lbStatus.AutoSize = true;
-            this.lbStatus.Location = new System.Drawing.Point(7, 7);
+            this.lbStatus.Location = new System.Drawing.Point(108, 8);
             this.lbStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbStatus.Name = "lbStatus";
             this.lbStatus.Size = new System.Drawing.Size(101, 12);
@@ -164,14 +159,15 @@
             // 
             // tcMain
             // 
-            this.tcMain.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tcMain.Controls.Add(this.tabPage1);
             this.tcMain.Controls.Add(this.tabPage2);
+            this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tcMain.Location = new System.Drawing.Point(4, 64);
+            this.tcMain.Font = new System.Drawing.Font("宋体", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(425, 291);
+            this.tcMain.Size = new System.Drawing.Size(362, 185);
             this.tcMain.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tcMain.TabIndex = 6;
             this.tcMain.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tcMain_DrawItem);
@@ -180,20 +176,20 @@
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
             this.tabPage1.Controls.Add(this.lsReqs);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 20);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage1.Size = new System.Drawing.Size(417, 265);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(354, 161);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "待打印";
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.lsDone);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 20);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage2.Size = new System.Drawing.Size(417, 265);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(354, 154);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "已打印";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -201,21 +197,20 @@
             // lsDone
             // 
             this.lsDone.Alignment = System.Windows.Forms.ListViewAlignment.SnapToGrid;
-            this.lsDone.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.lsDone.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.done_tran_info,
             this.done_ClientInfo,
             this.done1_Amount,
             this.print_time});
+            this.lsDone.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsDone.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lsDone.FullRowSelect = true;
             this.lsDone.GridLines = true;
             this.lsDone.HideSelection = false;
-            this.lsDone.Location = new System.Drawing.Point(5, 3);
+            this.lsDone.Location = new System.Drawing.Point(3, 3);
             this.lsDone.MultiSelect = false;
             this.lsDone.Name = "lsDone";
-            this.lsDone.Size = new System.Drawing.Size(410, 257);
+            this.lsDone.Size = new System.Drawing.Size(348, 148);
             this.lsDone.TabIndex = 0;
             this.lsDone.UseCompatibleStateImageBehavior = false;
             this.lsDone.View = System.Windows.Forms.View.Details;
@@ -250,7 +245,7 @@
             // lbskStatus
             // 
             this.lbskStatus.AutoSize = true;
-            this.lbskStatus.Location = new System.Drawing.Point(163, 7);
+            this.lbskStatus.Location = new System.Drawing.Point(5, 33);
             this.lbskStatus.Name = "lbskStatus";
             this.lbskStatus.Size = new System.Drawing.Size(65, 12);
             this.lbskStatus.TabIndex = 7;
@@ -259,7 +254,9 @@
             // cbTopMost
             // 
             this.cbTopMost.AutoSize = true;
-            this.cbTopMost.Location = new System.Drawing.Point(9, 21);
+            this.cbTopMost.Checked = true;
+            this.cbTopMost.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbTopMost.Location = new System.Drawing.Point(7, 7);
             this.cbTopMost.Name = "cbTopMost";
             this.cbTopMost.Size = new System.Drawing.Size(96, 16);
             this.cbTopMost.TabIndex = 9;
@@ -269,66 +266,38 @@
             // 
             // plInfo
             // 
-            this.plInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.plInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.plInfo.Controls.Add(this.cbTopMost);
             this.plInfo.Controls.Add(this.lbStatus);
             this.plInfo.Controls.Add(this.lbskStatus);
-            this.plInfo.Location = new System.Drawing.Point(3, 361);
+            this.plInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.plInfo.Location = new System.Drawing.Point(0, 185);
             this.plInfo.Name = "plInfo";
-            this.plInfo.Size = new System.Drawing.Size(427, 51);
+            this.plInfo.Size = new System.Drawing.Size(362, 54);
             this.plInfo.TabIndex = 7;
             // 
-            // flMain
+            // panel1
             // 
-            this.flMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flMain.AutoSize = true;
-            this.flMain.Controls.Add(this.plBanner);
-            this.flMain.Controls.Add(this.tcMain);
-            this.flMain.Controls.Add(this.plInfo);
-            this.flMain.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flMain.Location = new System.Drawing.Point(8, 8);
-            this.flMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.flMain.Name = "flMain";
-            this.flMain.Size = new System.Drawing.Size(433, 417);
-            this.flMain.TabIndex = 8;
-            this.flMain.Resize += new System.EventHandler(this.flMain_Resize);
-            // 
-            // plBanner
-            // 
-            this.plBanner.Controls.Add(this.lbBanner);
-            this.plBanner.Location = new System.Drawing.Point(2, 2);
-            this.plBanner.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.plBanner.Name = "plBanner";
-            this.plBanner.Size = new System.Drawing.Size(429, 57);
-            this.plBanner.TabIndex = 8;
-            // 
-            // lbBanner
-            // 
-            this.lbBanner.AutoSize = true;
-            this.lbBanner.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbBanner.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.lbBanner.Location = new System.Drawing.Point(8, 23);
-            this.lbBanner.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbBanner.Name = "lbBanner";
-            this.lbBanner.Size = new System.Drawing.Size(82, 24);
-            this.lbBanner.TabIndex = 0;
-            this.lbBanner.Text = "label1";
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.tcMain);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(362, 185);
+            this.panel1.TabIndex = 7;
             // 
             // fmReqList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 433);
-            this.Controls.Add(this.flMain);
+            this.ClientSize = new System.Drawing.Size(362, 239);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.plInfo);
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "fmReqList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "车到发票辅助打印";
+            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.fmReqList_FormClosed);
             this.Load += new System.EventHandler(this.fmReqList_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fmReqList_KeyDown);
@@ -339,11 +308,8 @@
             this.tabPage2.ResumeLayout(false);
             this.plInfo.ResumeLayout(false);
             this.plInfo.PerformLayout();
-            this.flMain.ResumeLayout(false);
-            this.plBanner.ResumeLayout(false);
-            this.plBanner.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -365,15 +331,13 @@
         private System.Windows.Forms.CheckBox cbTopMost;
         private System.Windows.Forms.ColumnHeader print_time;
         private System.Windows.Forms.Panel plInfo;
-        private System.Windows.Forms.FlowLayoutPanel flMain;
         private System.Windows.Forms.ContextMenuStrip cmList;
         private System.Windows.Forms.ToolStripMenuItem tsItemPrint;
         private System.Windows.Forms.ToolStripMenuItem tsItemDelete;
         private System.Windows.Forms.ToolStripMenuItem tsItemCopy;
         private System.Windows.Forms.ToolStripMenuItem tsItemCopyClient;
         private System.Windows.Forms.ToolStripMenuItem tsItemCopyLicense;
-        private System.Windows.Forms.Panel plBanner;
-        private System.Windows.Forms.Label lbBanner;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

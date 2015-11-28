@@ -15,7 +15,6 @@ namespace WndInteract
         static List<CmdDefintion> mCmdList = new List<CmdDefintion>();
         static String Last_Error = "NO";
         static public TraceLevel debug_level = TraceLevel.Error;
-        static Dictionary<String, String> replace_list = new Dictionary<string, string>();
         static public String getLastError() {
             return Last_Error;
         }

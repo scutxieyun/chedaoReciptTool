@@ -161,13 +161,6 @@ namespace CheDaoReciptHike
         {
             CheDaoFactory.init();
             this.Text += " " + AppConfig.GetVersion();
-            if (AppConfig.GetBanner() == null)
-            {
-                this.plBanner.Visible = false;
-            }
-            else {
-                this.lbBanner.Text = AppConfig.GetBanner();
-            }
             new ReciptServer().start(AppConfig.GetPort());
             layoutMainContent();
         }
@@ -217,10 +210,10 @@ namespace CheDaoReciptHike
             }
         }
         private void layoutMainContent() {
-            if (!plBanner.Visible) tcMain.Height = flMain.Height - plInfo.Height - 30;
+            /*if (!plBanner.Visible) tcMain.Height = flMain.Height - plInfo.Height - 30;
             else tcMain.Height = flMain.Height - plInfo.Height - this.plBanner.Height - 30;
             tcMain.Width = this.flMain.Width - 10;
-            plInfo.Width = this.flMain.Width - 10;
+            plInfo.Width = this.flMain.Width - 10;*/
             return;
         }
 

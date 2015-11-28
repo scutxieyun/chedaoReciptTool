@@ -183,7 +183,7 @@
             this.tbOpsDelay.Name = "tbOpsDelay";
             this.tbOpsDelay.Size = new System.Drawing.Size(121, 21);
             this.tbOpsDelay.TabIndex = 14;
-            this.tbOpsDelay.Text = "200";
+            this.tbOpsDelay.Text = "300";
             // 
             // label2
             // 
