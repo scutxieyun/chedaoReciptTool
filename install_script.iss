@@ -39,6 +39,7 @@ Source: "D:\backup\chedaoReciptTool\bin\CheDaoReciptHike.exe"; DestDir: "{app}";
 Source: "D:\backup\chedaoReciptTool\bin\CheDaoReciptHike.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\backup\chedaoReciptTool\bin\chedaoshuikong_cfg.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\backup\chedaoReciptTool\bin\WndInteract.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\backup\chedaoReciptTool\configuration\UpdateList.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\backup\chedaoReciptTool\bin\log\*"; DestDir: "{app}\log"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

@@ -2,7 +2,7 @@
 <AutoUpdater>
 	<description>Application autoUpdate</description>
   	<Updater>
-		<Url>http://127.0.0.1</Url>
+		<Url>http://xbim2016.duapp.com/public/index.php/chedao/update/</Url>
 		<LastUpdateTime>2015-11-4</LastUpdateTime>
   	</Updater>
   	<Application applicationId="GasStation">
