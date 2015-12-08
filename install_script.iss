@@ -16,7 +16,6 @@ AppUpdatesURL=http://www.51autogo.com/
 DefaultDirName={pf}\车到发票打印辅助系统
 DefaultGroupName=车到发票打印辅助系统
 OutputBaseFilename=setup
-SetupIconFile=gasoline_128px_1179478_easyicon.net.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -27,20 +26,17 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 [Files]
-Source: "D:\backup\chedaoReciptTool\bin\CheDaoLoader.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\AutoUpdate.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\AutoUpdate.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\AutoUpdater.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\CheDaoLoader.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\ChedaoMKLib.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\CheDaoReciptCfg.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\CheDaoReciptCfg.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\CheDaoReciptHike.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\CheDaoReciptHike.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\chedaoshuikong_cfg.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\WndInteract.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\configuration\UpdateList.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\backup\chedaoReciptTool\bin\log\*"; DestDir: "{app}\log"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "bin\CheDaoLoader.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\AutoUpdate.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\AutoUpdate.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\AutoUpdater.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\CheDaoLoader.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\ChedaoMKLib.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\CheDaoReciptHike.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\CheDaoReciptHike.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\WndInteract.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\UpdateList.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\log\*"; DestDir: "{app}\log"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

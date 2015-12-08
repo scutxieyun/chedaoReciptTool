@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Net;
+using WndInteract;
 
 namespace CheDaoLoader
 {
@@ -18,7 +19,7 @@ namespace CheDaoLoader
         static int app_status = 0;
         static DateTime last_start_tick = DateTime.MinValue;
         static Timer mTimer;
-        static String mAppCode;
+        static public String mAppCode;
 
         [STAThread]
         static void Main(string[] args)
@@ -33,7 +34,7 @@ namespace CheDaoLoader
 
             if (CheckUpdate() == true)
             {
-                StartAutoUpdate();
+                if(StartAutoUpdate() == true) return; //exit the program and update
             }
 
             if (StartApp() == true)
@@ -104,20 +105,35 @@ namespace CheDaoLoader
         private static Boolean Configure_Check()
         {
             Configuration conf = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
             if (null == conf.AppSettings.Settings["client_id"])
             {
                 fmConfigure fmConf = new fmConfigure();
                 if (fmConf.ShowDialog() == DialogResult.OK)
                 {
                     conf.AppSettings.Settings.Add("client_id", fmConf.AppCode);
-                    conf.Save(ConfigurationSaveMode.Modified);
-                    mAppCode = fmConf.AppCode;
-                    return true;
+                    try {
+                        conf.Save(ConfigurationSaveMode.Modified);
+                        mAppCode = fmConf.AppCode;
+                    }
+                    catch (Exception e) {
+                        MessageBox.Show("保存配置出错");
+                        return false;
+                    }
                 }
-                return false;
+                else
+                {
+                    return false;
+                }
+            }else mAppCode = conf.AppSettings.Settings["client_id"].Value;
+            if (!File.Exists(ScriptExecuter.default_script_fn)) {
+                wndEnvCfg fmCfg = new wndEnvCfg();
+                if (fmCfg.ShowDialog() != DialogResult.OK)
+                {
+                    return false;
+                }
             }
-            mAppCode = conf.AppSettings.Settings["client_id"].Value;
-            return true;
+            return true; ;
         }
         static int mNhr_count = 0;
         private static void MTimer_Tick(object sender, EventArgs e)
@@ -293,15 +309,13 @@ namespace CheDaoLoader
             {
                 file = System.Configuration.ConfigurationManager.AppSettings["updater_exe"];
                 Process p = Process.Start(file);
-                p.WaitForExit();
-
+                return true;
             }
             catch (Exception e)
             {
                 System.Console.WriteLine("升级执行 " + file + " 失败:" + e.Message);
                 return false;
             }
-            return true;
         }
     }
 }

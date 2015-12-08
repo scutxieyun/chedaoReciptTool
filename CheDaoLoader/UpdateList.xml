@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="gb2312"?>
+<AutoUpdater>
+	<description>Application autoUpdate</description>
+  	<Updater>
+		<Url>http://xbim2016.duapp.com/public/index.php/chedao/update/</Url>
+		<LastUpdateTime>2015-11-4</LastUpdateTime>
+  	</Updater>
+  	<Application applicationId="GasStation">
+    		<EntryPoint>CheDaoReciptHike.exe</EntryPoint>
+    		<Location>.</Location>
+    		<Version>1.0</Version>
+  	</Application>
+  	<Files>
+	   <File Ver="1.0" Name="CheDaoReciptHike.exe"/>
+		 <File Ver="1.0" Name="Common.xml"/>
+  	</Files>
+</AutoUpdater>

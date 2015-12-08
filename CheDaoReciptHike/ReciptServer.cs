@@ -15,10 +15,17 @@ namespace CheDaoReciptHike
     {
         Socket mListener;
         ClientAgent mClient;
+        String ipv4Addrs = null;
+        int mPort = 0;
         //start the server at given port
         public int start(int port) {
             IPHostEntry ipHost = Dns.GetHostEntry("");
-            IPAddress ipAddr = ipHost.AddressList[0];
+            mPort = port;
+            foreach (IPAddress addr in ipHost.AddressList) {
+                if (addr.AddressFamily == AddressFamily.InterNetwork) {
+                    ipv4Addrs = ipv4Addrs + " " + addr.ToString();
+                }
+            }
             IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, port);
             SocketPermission permission;
             permission = new SocketPermission(NetworkAccess.Accept,
@@ -39,10 +46,16 @@ namespace CheDaoReciptHike
             }
             Socket listener = (Socket)ar.AsyncState;
             Socket handler = listener.EndAccept(ar);
-            mClient = new ClientAgent(handler); //only one working client
+            mClient = new ClientAgent(handler,this); //only one working client
             mClient.startReceive();
             AsyncCallback aCallback = new AsyncCallback(AcceptCallback);
             mListener.BeginAccept(aCallback, mListener);
+        }
+
+        public string ServiceInfo()
+        {
+            if (ipv4Addrs == null) return "异常";
+            return String.Format("{0:s}:{1:d}", this.ipv4Addrs, mPort);
         }
     }
     class ClientAgent {
@@ -52,17 +65,19 @@ namespace CheDaoReciptHike
         byte[] mBuffer = new byte[max_fragment - header_length];
         public static ChePacket gPacketHandle = new ChePacket();
         String mRemoteInfo;
-        public ClientAgent(Socket s) {
+        ReciptServer mServ = null;
+        public ClientAgent(Socket s, ReciptServer srv) {
+            mServ = srv;
             peer = s;
             Trace.TraceInformation("new connect comming from " + peer.RemoteEndPoint.ToString());
-            mRemoteInfo = peer.RemoteEndPoint.ToString();
+            mRemoteInfo = ((IPEndPoint)peer.RemoteEndPoint).Address.ToString();
             gPacketHandle.reset();
-            Program.UpdateStatus(((IPEndPoint)peer.RemoteEndPoint).Address.ToString());
+            Program.UpdateStatus(mRemoteInfo);
         }
         public void close() {
             if(peer != null) peer.Close();
             peer = null;
-            Program.UpdateStatus("无连接");
+            Program.UpdateStatus(mRemoteInfo + "断开");
         }
         public void startReceive() {
             peer.BeginReceive(mBuffer, 0, mBuffer.Length, SocketFlags.None, new AsyncCallback(receiveCallback), null);
@@ -75,21 +90,26 @@ namespace CheDaoReciptHike
                 bytesRead = peer.EndReceive(ar);
                 if (bytesRead > 0)
                 {
-                    Trace.WriteLineIf(Program.trace_sw.TraceVerbose,"new TCP data:" + bytesRead.ToString() + " bytes");
+                    Trace.WriteLineIf(Program.trace_sw.TraceVerbose, "new TCP data:" + bytesRead.ToString() + " bytes");
                     int res_len = 0;
-                    Byte[] res = gPacketHandle.handle_incomming(mBuffer, bytesRead,out res_len);
-                    if (res == null) {
+                    Byte[] res = gPacketHandle.handle_incomming(mBuffer, bytesRead, out res_len);
+                    if (res == null)
+                    {
                         throw new Exception("abort the connection because decode package failed");
                     }
                     if (res_len == 0)
                     {
-                        Trace.WriteLineIf(Program.trace_sw.TraceError,"报文处理失败");
+                        Trace.WriteLineIf(Program.trace_sw.TraceError, "报文处理失败");
                     }
                     else
                     {
                         peer.Send(res, res_len, SocketFlags.None);
                     }
                     startReceive();
+                }
+                else {
+                    Trace.WriteLineIf(Program.trace_sw.TraceWarning, "连接正常中断 from " + mRemoteInfo);
+                    this.close();
                 }
             }
             catch (Exception e) {

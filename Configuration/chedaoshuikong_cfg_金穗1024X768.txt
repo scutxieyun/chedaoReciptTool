@@ -1,0 +1,34 @@
+﻿#检查屏幕分辨率#
+CheckResolution(1024,768)
+#主税控窗口标题# = 
+###main_wnd_str=开具增值税普通发票
+ActiveWindow(S(开具增值税普通发票)[0])
+#主窗口大小和位置#
+SetAndCheckWinRect(114,97,654,927)
+sleep(100)
+ReplaceString(Product_Code,95号汽油（V）,95#)
+ReplaceString(Product_Code,92号汽油（V）,92#)
+ReplaceString(Product_Code,90号汽油（V）,90#)
+sleep(10)
+#字段填充#
+###field=<客户名称>|Copy([Customer_Text])|300,303
+CopyClipboard([Customer_Text])
+sleep(200)
+SetMouse(300,303)
+sleep(200)
+SendInput(^v)
+sleep(200)
+###field=<油号>|Set([Product_Code])|261,420
+SetMouse(261,420)
+sleep(200)
+SendInput([Product_Code])
+sleep(200)
+###field=[点击]|<Click>|186,460
+#点击# = 186,460
+SetMouse(186,460)
+sleep(200)
+###field=<总价>|Set([Amount])|669,419
+SetMouse(669,419)
+sleep(200)
+SendInput([Amount])
+sleep(200)

@@ -161,7 +161,9 @@ namespace CheDaoReciptHike
         {
             CheDaoFactory.init();
             this.Text += " " + AppConfig.GetVersion();
-            new ReciptServer().start(AppConfig.GetPort());
+            ReciptServer serv = new ReciptServer();
+            serv.start(AppConfig.GetPort());
+            _UpdateStatus(serv.ServiceInfo());
             layoutMainContent();
         }
 

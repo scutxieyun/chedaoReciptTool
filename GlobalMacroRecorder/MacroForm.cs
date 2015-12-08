@@ -449,7 +449,7 @@ namespace GlobalMacroRecorder
             if (cbMainWnd.Items.Count == 0) {
                 List<String> wnds = Win32Locator.GetWindows();
                 foreach (String str in wnds) {
-                    if(str.Trim() != "")
+                    if(str.Trim() != "" && Win32Locator.HasChinese(str))
                         cbMainWnd.Items.Add(str);
                 }
             }
@@ -463,8 +463,8 @@ namespace GlobalMacroRecorder
             {
                 try
                 {
-                    bp.Save("shuikong-screen.bmp", ImageFormat.Bmp);
-                    MessageBox.Show("屏幕信息保存在 shuikong-screen.bmp, 请发送给技术部门分析");
+                    bp.Save("shuikong-screen.jpg", ImageFormat.Jpeg);
+                    MessageBox.Show("屏幕信息保存在 shuikong-screen.jpg, 请发送给技术部门分析");
                 }
                 catch (Exception ex) {
                     MessageBox.Show("保存失败 " + ex.Message);

@@ -15,6 +15,7 @@ namespace WndInteract
         static List<CmdDefintion> mCmdList = new List<CmdDefintion>();
         static String Last_Error = "NO";
         static public TraceLevel debug_level = TraceLevel.Error;
+        public const String default_script_fn = "chedaoshuikong_cfg.txt";
         static public String getLastError() {
             return Last_Error;
         }

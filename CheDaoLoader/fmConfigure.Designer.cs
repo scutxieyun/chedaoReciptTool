@@ -58,7 +58,7 @@
             // tbName
             // 
             this.tbName.Location = new System.Drawing.Point(93, 19);
-            this.tbName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbName.Margin = new System.Windows.Forms.Padding(2);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(235, 21);
             this.tbName.TabIndex = 1;
@@ -97,7 +97,7 @@
             // 
             this.cbProvince.FormattingEnabled = true;
             this.cbProvince.Location = new System.Drawing.Point(93, 61);
-            this.cbProvince.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbProvince.Margin = new System.Windows.Forms.Padding(2);
             this.cbProvince.Name = "cbProvince";
             this.cbProvince.Size = new System.Drawing.Size(82, 20);
             this.cbProvince.TabIndex = 5;
@@ -107,7 +107,7 @@
             // 
             this.cbCity.FormattingEnabled = true;
             this.cbCity.Location = new System.Drawing.Point(199, 61);
-            this.cbCity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCity.Margin = new System.Windows.Forms.Padding(2);
             this.cbCity.Name = "cbCity";
             this.cbCity.Size = new System.Drawing.Size(82, 20);
             this.cbCity.TabIndex = 6;
@@ -117,7 +117,7 @@
             // 
             this.cbArea.FormattingEnabled = true;
             this.cbArea.Location = new System.Drawing.Point(317, 61);
-            this.cbArea.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbArea.Margin = new System.Windows.Forms.Padding(2);
             this.cbArea.Name = "cbArea";
             this.cbArea.Size = new System.Drawing.Size(126, 20);
             this.cbArea.TabIndex = 7;
@@ -127,9 +127,9 @@
             // 
             this.groupBox1.Controls.Add(this.tbAddr);
             this.groupBox1.Location = new System.Drawing.Point(31, 50);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(431, 65);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
@@ -138,7 +138,7 @@
             // tbAddr
             // 
             this.tbAddr.Location = new System.Drawing.Point(61, 37);
-            this.tbAddr.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbAddr.Margin = new System.Windows.Forms.Padding(2);
             this.tbAddr.Name = "tbAddr";
             this.tbAddr.Size = new System.Drawing.Size(351, 21);
             this.tbAddr.TabIndex = 0;
@@ -156,7 +156,7 @@
             // tbOperator
             // 
             this.tbOperator.Location = new System.Drawing.Point(93, 128);
-            this.tbOperator.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbOperator.Margin = new System.Windows.Forms.Padding(2);
             this.tbOperator.Name = "tbOperator";
             this.tbOperator.Size = new System.Drawing.Size(235, 21);
             this.tbOperator.TabIndex = 10;
@@ -164,7 +164,7 @@
             // btRegister
             // 
             this.btRegister.Location = new System.Drawing.Point(364, 159);
-            this.btRegister.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btRegister.Margin = new System.Windows.Forms.Padding(2);
             this.btRegister.Name = "btRegister";
             this.btRegister.Size = new System.Drawing.Size(58, 25);
             this.btRegister.TabIndex = 13;
@@ -175,7 +175,7 @@
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(470, 159);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(55, 25);
             this.button2.TabIndex = 14;
@@ -202,8 +202,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "fmConfigure";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "注册";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
