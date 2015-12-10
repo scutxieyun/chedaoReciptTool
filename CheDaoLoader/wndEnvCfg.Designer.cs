@@ -94,7 +94,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbWndsList);
             this.Name = "wndEnvCfg";
-            this.Text = "wndEnvCfg";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.Text = "配置关键获取";
+            this.Load += new System.EventHandler(this.wndEnvCfg_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

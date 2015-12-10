@@ -10,4 +10,7 @@
     <FallbackCulture>zh-CN</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>5648388bc8759 http://127.0.0.1/public/index.php/chedao/</StartArguments>
+  </PropertyGroup>
 </Project>

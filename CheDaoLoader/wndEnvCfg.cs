@@ -45,6 +45,7 @@ namespace CheDaoLoader
                 w_cli.DownloadFile(url, "tmp_" + ScriptExecuter.default_script_fn);
                 Trace.WriteLine("写入配置文件tmp_" + ScriptExecuter.default_script_fn + Environment.NewLine);
                 Trace.WriteLine("结束" + Environment.NewLine);
+                MessageBox.Show("获取到配置文件，请点击测试进行验证");
                 btTest.Visible = true;
             }
             catch (IOException io_ex)
@@ -164,6 +165,14 @@ namespace CheDaoLoader
             {
                 tbLog.AppendText(str + Environment.NewLine);
             });
+        }
+
+        private void wndEnvCfg_Load(object sender, EventArgs e)
+        {
+            //放置到右下角
+            System.Drawing.Rectangle resolution = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+            this.Top = resolution.Height - this.Height;
+            this.Left = resolution.Width - this.Width;
         }
     }
 

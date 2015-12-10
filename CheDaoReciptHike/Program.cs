@@ -21,7 +21,7 @@ namespace CheDaoReciptHike
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(String[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -34,7 +34,7 @@ namespace CheDaoReciptHike
                 //st_log = new TextWriterTraceListener(fn);
                 //Trace.Listeners.Add(st_log);
                 Trace.WriteLineIf(trace_sw.TraceInfo,"start ...in " + Application.ExecutablePath);
-                mainForm = new fmReqList();     
+                mainForm = new fmReqList(args);     
                 Application.Run(mainForm);
                 Trace.WriteLineIf(trace_sw.TraceInfo,"gracefully shutdown...");
                 Trace.Flush();

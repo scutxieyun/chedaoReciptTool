@@ -122,6 +122,14 @@ namespace CheDaoReciptHike
                "\"{0:s}\" Result=\"{1:d}\"><Print_Number>{2:s}</Print_Number><Time>{3:s}</Time>" + 
                "<Result_Detail></Result_Detail></Invoice_Response>",this.Order_Number,this.Result,this.Print_Number,DateTime.Now);
         }
+
+        public String toJsonString(int act_code,bool first_rec) {
+            String act_str = "打印";
+            String col_pre = first_rec ? "" : ",";
+            if (act_code != CheDaoInterface.print_confirm) act_str = "删除";
+            return String.Format("{6:s}{\"id\":\"{0:s}\",\"cust\":\"{1:s}\",\"lic_no\":\"{2:s}\",\"code\":\"{3:s}\"},\"amount\":\"{4:s}\",\"act\":\"{5:s}\",'act_time':'{7:s}','pos_gen_time':'{8:s}'}",
+                this.Order_Number,this.Customer_Text,this.LicenseNumber,this.Product_Code,this.Amount,act_str,col_pre,this.Time,DateTime.Now.ToShortTimeString());
+        }
     }
     [XmlRootAttribute("Invoice_Print", Namespace = "", IsNullable = false)]
     public class ChePrintRequest : CheDaoInterface
@@ -237,6 +245,9 @@ namespace CheDaoReciptHike
         static int Print_Request_Count = 0;
         static int Print_Act_Count = 0;
         static int save_error_count = 0;
+        public static int upload_err = 0;
+        public static int upload_ok = 0;
+        public static string latest_upload_error = "";
 
         static Dictionary<String, CheRequest> mPendingList = new Dictionary<String, CheRequest>(); //dont send to UI. until the confirm message arrive.
         

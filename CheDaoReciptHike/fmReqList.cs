@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using CheDaoReciptHike.Properties;
+using System.IO;
+using System.Net;
 
 namespace CheDaoReciptHike
 {
@@ -19,11 +21,22 @@ namespace CheDaoReciptHike
         List<CheRequest> mActList = new List<CheRequest>();     //the transaction which is required the recipt
         List<CheRequest> mDoneList = new List<CheRequest>();    //the print is done
         int m60mCounter = 0;
-        public fmReqList()
+        int m10mCounter = 0;
+        String mClientId = "unconfigured";
+        String base_url = null;
+        StringWriter mRecBuffer = null;
+        String mPendingBuffer = null;
+        WebClient mWebClient = new WebClient();
+        public fmReqList(String[] args)
         {
             log = new fmLog();
             this.AddOwnedForm(log);
             InitializeComponent();
+            if (args.Length >= 2) {
+                mClientId = args[0];
+                mWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(RecUploadDone);
+                base_url = args[1] + "uploadrec?client_id=" + mClientId;
+            }
             if(NewShuiKongInterface.init() != 0) MessageBox.Show("税控脚本初始化失败 " + NewShuiKongInterface.getLastError());
             /*ShuiKongFactory.init();
             if (ShuiKongFactory.DetectShuiKong() == true) {
@@ -32,8 +45,33 @@ namespace CheDaoReciptHike
             
         }
 
-        
-        
+        private void RecUploadDone(object sender, UploadStringCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                int res;
+                if (int.TryParse(e.Result, out res) == false)
+                {
+                    CheDaoFactory.upload_err++;
+                    CheDaoFactory.latest_upload_error = "return error:" + e.Result;
+                }
+                else
+                {
+                    if (res > 0) CheDaoFactory.upload_ok++;
+                    else
+                    {
+                        CheDaoFactory.upload_err++;
+                        CheDaoFactory.latest_upload_error = "format error";
+                    }
+                }
+            }
+            else {
+                CheDaoFactory.upload_err++;
+                CheDaoFactory.latest_upload_error = "network issue";
+            }
+            mPendingBuffer = null;
+        }
+
         public void AddRequest(CheDaoInterface req) {
             switch (req.message_type) {
                 case CheDaoInterface.data_validation:
@@ -47,14 +85,14 @@ namespace CheDaoReciptHike
                     ChePActionRequest p_item = (ChePActionRequest)req;
                     this.Invoke((MethodInvoker)delegate
                     {
-                        this.MoveToDoneList(p_item.Order_Number,p_item.Printed_Time);// run in UI thread
+                        this.MoveToDoneList(p_item.Order_Number,p_item.Printed_Time,p_item.message_type);// run in UI thread
                     });
                     break;
                 case CheDaoInterface.delete_cmd:
                     CheDeleteActionRequest d_item = (CheDeleteActionRequest)req;
                     this.Invoke((MethodInvoker)delegate
                     {
-                        this.MoveToDoneList(d_item.Order_Number, d_item.Printed_Time);// run in UI thread
+                        this.MoveToDoneList(d_item.Order_Number, d_item.Printed_Time,d_item.message_type);// run in UI thread
                     });
                     break;
                 default:
@@ -116,17 +154,33 @@ namespace CheDaoReciptHike
                 m60mCounter = 0 ;
                 CheDaoFactory.Handle_Internal_Package(CheDaoInterface.clean_cmd, Encoding.UTF8.GetBytes("Cleanup"));
             }
-
+            m10mCounter++;
+            if (m10mCounter >= 10 && base_url != null && !mWebClient.IsBusy) {
+                m10mCounter = 0;
+                if (mRecBuffer != null && mPendingBuffer == null) {
+                    mPendingBuffer = "[" + mRecBuffer.ToString() + "]"; 
+                    mRecBuffer = null; //the operation is safe
+                }
+                if (mPendingBuffer != null) {
+                    mWebClient.UploadStringAsync(new Uri(base_url), mPendingBuffer);
+                }
+            }
         }
 
         /** just for the case: move one item to done list without print*/
-        private void MoveToDoneList(String TransNo,String Printed_Time) {
+        private void MoveToDoneList(String TransNo,String Printed_Time,int act_code) {
             ListViewItem[] list_items = lsReqs.Items.Find(TransNo,false);
             if (list_items.Length > 0) {
                 lsReqs.Items.Remove(list_items[0]);
                 this.lsDone.Items.Insert(0,list_items[0]).SubItems.Add(Printed_Time);
                 this.mActList.Remove((CheRequest)list_items[0].Tag);
                 this.mDoneList.Add((CheRequest)list_items[0].Tag);
+                bool firstRec = false;
+                if (mRecBuffer == null) {
+                    firstRec = true;
+                    mRecBuffer = new StringWriter();
+                }
+                mRecBuffer.Write(((CheRequest)list_items[0].Tag).toJsonString(act_code,firstRec));
                 if (mActList.Count == 0) this.Refresh();
             }
 
