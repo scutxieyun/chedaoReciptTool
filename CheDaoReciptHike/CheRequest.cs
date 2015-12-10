@@ -127,8 +127,8 @@ namespace CheDaoReciptHike
             String act_str = "打印";
             String col_pre = first_rec ? "" : ",";
             if (act_code != CheDaoInterface.print_confirm) act_str = "删除";
-            return String.Format("{6:s}{\"id\":\"{0:s}\",\"cust\":\"{1:s}\",\"lic_no\":\"{2:s}\",\"code\":\"{3:s}\"},\"amount\":\"{4:s}\",\"act\":\"{5:s}\",'act_time':'{7:s}','pos_gen_time':'{8:s}'}",
-                this.Order_Number,this.Customer_Text,this.LicenseNumber,this.Product_Code,this.Amount,act_str,col_pre,this.Time,DateTime.Now.ToShortTimeString());
+            return col_pre + "{" + String.Format("\"id\":\"{0:s}\",\"cust\":\"{1:s}\",\"lic_no\":\"{2:s}\",\"code\":\"{3:s}\",\"amount\":\"{4:s}\",\"act\":\"{5:s}\",'act_time':'{6:s}','pos_gen_time':'{7:s}'",
+                            this.Order_Number,this.Customer_Text,this.LicenseNumber,this.Product_Code,this.Amount,act_str,DateTime.Now,this.Time) + "}";
         }
     }
     [XmlRootAttribute("Invoice_Print", Namespace = "", IsNullable = false)]

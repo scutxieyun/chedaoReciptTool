@@ -155,7 +155,7 @@ namespace CheDaoReciptHike
                 CheDaoFactory.Handle_Internal_Package(CheDaoInterface.clean_cmd, Encoding.UTF8.GetBytes("Cleanup"));
             }
             m10mCounter++;
-            if (m10mCounter >= 10 && base_url != null && !mWebClient.IsBusy) {
+            if (m10mCounter >= 1 && base_url != null && !mWebClient.IsBusy) {
                 m10mCounter = 0;
                 if (mRecBuffer != null && mPendingBuffer == null) {
                     mPendingBuffer = "[" + mRecBuffer.ToString() + "]"; 
