@@ -11,6 +11,9 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>5648388bc8759 http://127.0.0.1/public/index.php/chedao/</StartArguments>
+    <StartArguments>566bb51be196e http://xbim2016.duapp.com/public/index.php/chedao/</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartArguments>http://xbim2016.duapp.com/public/index.php/chedao/ 564add673af4e</StartArguments>
   </PropertyGroup>
 </Project>
