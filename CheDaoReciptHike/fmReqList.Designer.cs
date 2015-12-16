@@ -150,12 +150,12 @@
             // lbStatus
             // 
             this.lbStatus.AutoSize = true;
-            this.lbStatus.Location = new System.Drawing.Point(108, 8);
+            this.lbStatus.Location = new System.Drawing.Point(104, 8);
             this.lbStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(101, 12);
+            this.lbStatus.Size = new System.Drawing.Size(71, 12);
             this.lbStatus.TabIndex = 5;
-            this.lbStatus.Text = "通信状态：无连接";
+            this.lbStatus.Text = "通信:无连接";
             // 
             // tcMain
             // 
@@ -189,7 +189,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 20);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(354, 154);
+            this.tabPage2.Size = new System.Drawing.Size(354, 161);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "已打印";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -210,7 +210,7 @@
             this.lsDone.Location = new System.Drawing.Point(3, 3);
             this.lsDone.MultiSelect = false;
             this.lsDone.Name = "lsDone";
-            this.lsDone.Size = new System.Drawing.Size(348, 148);
+            this.lsDone.Size = new System.Drawing.Size(348, 155);
             this.lsDone.TabIndex = 0;
             this.lsDone.UseCompatibleStateImageBehavior = false;
             this.lsDone.View = System.Windows.Forms.View.Details;

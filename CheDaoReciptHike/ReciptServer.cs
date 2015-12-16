@@ -16,6 +16,7 @@ namespace CheDaoReciptHike
         Socket mListener;
         ClientAgent mClient;
         String ipv4Addrs = null;
+        int mConnectCounter = 0;
         int mPort = 0;
         //start the server at given port
         public int start(int port) {
@@ -48,6 +49,7 @@ namespace CheDaoReciptHike
             Socket handler = listener.EndAccept(ar);
             mClient = new ClientAgent(handler,this); //only one working client
             mClient.startReceive();
+            mConnectCounter++;
             AsyncCallback aCallback = new AsyncCallback(AcceptCallback);
             mListener.BeginAccept(aCallback, mListener);
         }
@@ -55,7 +57,7 @@ namespace CheDaoReciptHike
         public string ServiceInfo()
         {
             if (ipv4Addrs == null) return "异常";
-            return String.Format("{0:s}:{1:d}", this.ipv4Addrs, mPort);
+            return String.Format("[{2:d}]{0:s}", this.ipv4Addrs, mPort,mConnectCounter);
         }
     }
     class ClientAgent {
@@ -72,12 +74,12 @@ namespace CheDaoReciptHike
             Trace.TraceInformation("new connect comming from " + peer.RemoteEndPoint.ToString());
             mRemoteInfo = ((IPEndPoint)peer.RemoteEndPoint).Address.ToString();
             gPacketHandle.reset();
-            Program.UpdateStatus(mRemoteInfo);
+            Program.UpdateStatus(srv.ServiceInfo() + "->" + mRemoteInfo);
         }
         public void close() {
             if(peer != null) peer.Close();
             peer = null;
-            Program.UpdateStatus(mRemoteInfo + "断开");
+            Program.UpdateStatus(mServ.ServiceInfo() + "->" + mRemoteInfo + "断开");
         }
         public void startReceive() {
             peer.BeginReceive(mBuffer, 0, mBuffer.Length, SocketFlags.None, new AsyncCallback(receiveCallback), null);

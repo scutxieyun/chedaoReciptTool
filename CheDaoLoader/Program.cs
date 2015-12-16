@@ -202,7 +202,7 @@ namespace CheDaoLoader
                     }
                 }
                 file = System.Configuration.ConfigurationManager.AppSettings["target_exe"];
-                Process p = Process.Start(file);
+                Process p = Process.Start(file, mAppCode + " " + ConfigurationManager.AppSettings["service_url"]);
                 p.EnableRaisingEvents = true;
                 last_start_tick = DateTime.Now;
                 app_status = 1; //working

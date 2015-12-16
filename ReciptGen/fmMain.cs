@@ -21,6 +21,7 @@ namespace ReciptGen
     {
         Socket mConnect;
         List<byte[]> InvoiceList = new List<byte[]>();
+        int mCount = 0;
         public fmMain()
         {
             InitializeComponent();
@@ -76,6 +77,8 @@ namespace ReciptGen
 
         private void tmInvoice_Tick(object sender, EventArgs e)
         {
+            if (mCount > 100) return;
+            mCount++;
             if(mConnect.Connected) mConnect.Send(GenInvoicePackage());
         }
 
