@@ -18,3 +18,5 @@ bin/*.*
 Output/*.*
 *.log
 UpdateList.xml
+UpdateList.xml
+*.exe

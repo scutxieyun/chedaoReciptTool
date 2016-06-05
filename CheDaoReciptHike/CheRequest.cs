@@ -127,9 +127,14 @@ namespace CheDaoReciptHike
             String act_str = "打印";
             String col_pre = first_rec ? "" : ",";
             if (act_code != CheDaoInterface.print_confirm) act_str = "删除";
+<<<<<<< HEAD
             return col_pre + "{" +
                 String.Format("\"id\":\"{0:s}\",\"cust\":\"{1:s}\",\"lic_no\":\"{2:s}\",\"code\":\"{3:s}\",\"amount\":\"{4:s}\",\"act\":\"{5:s}\",\"act_time\":\"{6:s}\",\"pos_gen_time\":\"{7:s}\"",
                 this.Order_Number, this.Customer_Text, this.LicenseNumber, this.Product_Code, this.Amount, act_str, this.Time, DateTime.Now.ToShortTimeString()) + "}";
+=======
+            return col_pre + "{" + String.Format("\"id\":\"{0:s}\",\"cust\":\"{1:s}\",\"lic_no\":\"{2:s}\",\"code\":\"{3:s}\",\"amount\":\"{4:s}\",\"act\":\"{5:s}\",\"act_time\":\"{6:s}\",\"pos_gen_time\":\"{7:s}\"",
+                            this.Order_Number,this.Customer_Text,this.LicenseNumber,this.Product_Code,this.Amount,act_str,DateTime.Now,this.Time) + "}";
+>>>>>>> 69678a7cdb3fb9c3628338321a614ab2a761fa9e
         }
     }
     [XmlRootAttribute("Invoice_Print", Namespace = "", IsNullable = false)]
@@ -302,7 +307,7 @@ namespace CheDaoReciptHike
         }
 
         public static string Dump() {
-            String res = "Active File bk: " + active_a + bk_fn + Environment.NewLine + "dict cache has " + mPendingList.Keys.Count.ToString() + Environment.NewLine;
+            String res = "Active File bk: " + active_a + bk_fn + Environment.NewLine + "dict cache has " + mPendingList.Keys.Count.ToString() + " upload_ok " + CheDaoFactory.upload_ok.ToString() + " upload_err " + upload_err.ToString() + Environment.NewLine;
             lock (mPendingList)
             {
                 res += String.Format("Invoice Request:{0:d}  Print Request:{1:d} Print Act {2:d} save err:{3:d}", Invoice_Request_Count, Print_Request_Count, Print_Act_Count, save_error_count) + Environment.NewLine;

@@ -22,6 +22,8 @@ namespace CheDaoReciptHike
         List<CheRequest> mDoneList = new List<CheRequest>();    //the print is done
         int m60mCounter = 0;
         int m10mCounter = 0;
+        const int upload_rec_period = 10;// min
+
         String mClientId = "unconfigured";
         String base_url = null;
         StringWriter mRecBuffer = null;
@@ -35,6 +37,7 @@ namespace CheDaoReciptHike
             if (args.Length >= 2) {
                 mClientId = args[0];
                 mWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(RecUploadDone);
+                mWebClient.Encoding = System.Text.Encoding.UTF8;
                 base_url = args[1] + "uploadrec?client_id=" + mClientId;
             }
             if(NewShuiKongInterface.init() != 0) MessageBox.Show("税控脚本初始化失败 " + NewShuiKongInterface.getLastError());
@@ -107,7 +110,7 @@ namespace CheDaoReciptHike
             });
         }
         private void _UpdateStatus(String info) {
-            lbStatus.Text = "通信状态：" + info;
+            lbStatus.Text = "通信:" + info;
         }
         private void _AddRequest(CheRequest req) {
             Boolean ref_req = false;
@@ -137,33 +140,43 @@ namespace CheDaoReciptHike
             CheDaoFactory.close();
         }
 
+        /*********************************************************************
+        测试代码
+        **/
+        int mTestCounter = 0;
+        private void timer_event() {
+            Random r = new Random();
+            mTestCounter++;
+            if (mTestCounter > r.Next(10)) {
+                mTestCounter = 0;
+                if (lsReqs.Items.Count > 0)
+                {
+                    int index = r.Next(lsReqs.Items.Count);
+                    ListViewItem act_item = lsReqs.Items[index];
+                    CheRequest req = (CheRequest)act_item.Tag;
+                    CheDaoFactory.Handle_Internal_Package(CheDaoInterface.delete_cmd, Encoding.UTF8.GetBytes(req.Order_Number));
+                }
+            }
+        }
+        /******************************************************************************/
+
         private void timer_1min_Tick(object sender, EventArgs e)
         {
-
-            /*if (ShuiKongFactory.DetectShuiKong() == true)
-            {
-                this.lbskStatus.Text = "税控状态:连接中";
-            }
-            else
-            {
-                this.lbskStatus.Text = "税控状态:无连接";
-            }*/
-
             m60mCounter++;
             if (m60mCounter >= AppConfig.GetLifeTimeOfRec()/2) {
                 m60mCounter = 0 ;
                 CheDaoFactory.Handle_Internal_Package(CheDaoInterface.clean_cmd, Encoding.UTF8.GetBytes("Cleanup"));
             }
             m10mCounter++;
+<<<<<<< HEAD
             if (m10mCounter >= 1 && base_url != null && !mWebClient.IsBusy) {
+=======
+            if (m10mCounter >= upload_rec_period && base_url != null && !mWebClient.IsBusy && mRecBuffer != null && mPendingBuffer == null) {
+>>>>>>> 69678a7cdb3fb9c3628338321a614ab2a761fa9e
                 m10mCounter = 0;
-                if (mRecBuffer != null && mPendingBuffer == null) {
-                    mPendingBuffer = "[" + mRecBuffer.ToString() + "]"; 
-                    mRecBuffer = null; //the operation is safe
-                }
-                if (mPendingBuffer != null) {
-                    mWebClient.UploadStringAsync(new Uri(base_url), mPendingBuffer);
-                }
+                mPendingBuffer = "[" + mRecBuffer.ToString() + "]"; 
+                mRecBuffer = null; //the operation is safe
+                mWebClient.UploadStringAsync(new Uri(base_url),mPendingBuffer);
             }
         }
 
@@ -180,7 +193,8 @@ namespace CheDaoReciptHike
                     firstRec = true;
                     mRecBuffer = new StringWriter();
                 }
-                mRecBuffer.Write(((CheRequest)list_items[0].Tag).toJsonString(act_code,firstRec));
+                CheRequest rec = (CheRequest)list_items[0].Tag;
+                if(rec != null) mRecBuffer.Write((rec).toJsonString(act_code,firstRec));
                 if (mActList.Count == 0) this.Refresh();
             }
 

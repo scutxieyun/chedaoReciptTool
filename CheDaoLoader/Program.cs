@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Net;
 using WndInteract;
+using Microsoft.Win32;
 
 namespace CheDaoLoader
 {
@@ -30,7 +31,10 @@ namespace CheDaoLoader
                 return;// only one instance
             }
 
-            if(Configure_Check() == false) return;
+            Directory.SetCurrentDirectory(Path.GetDirectoryName((String)Application.ExecutablePath));
+
+
+            if (Configure_Check() == false) return;
 
             if (CheckUpdate() == true)
             {
@@ -39,9 +43,11 @@ namespace CheDaoLoader
 
             if (StartApp() == true)
             {
+                checkandCreateStartup();
+                checkAndCreateShortcut();
                 mNotify = new NotifyIcon();
                 mNotify.Icon = Resource.trayicon;
-                mNotify.Text = "车道加油辅助";
+                mNotify.Text = "车道加油辅助v1.1";
                 mNotify.Visible = true;
                 PrepareUpload();
                 mTimer = new Timer();
@@ -202,7 +208,7 @@ namespace CheDaoLoader
                     }
                 }
                 file = System.Configuration.ConfigurationManager.AppSettings["target_exe"];
-                Process p = Process.Start(file);
+                Process p = Process.Start(file, mAppCode + " " + ConfigurationManager.AppSettings["service_url"]);
                 p.EnableRaisingEvents = true;
                 last_start_tick = DateTime.Now;
                 app_status = 1; //working
@@ -317,5 +323,43 @@ namespace CheDaoLoader
                 return false;
             }
         }
+
+
+        static private bool checkandCreateStartup()
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                String myKey = "Chedao Shuikong Tool";
+                String myValue = "\"" + Application.ExecutablePath + "\"";
+                if (key.GetValue(myKey) == null || key.GetValue(myKey).ToString() != myValue)
+                {
+                    key.SetValue(myKey, "\"" + Application.ExecutablePath + "\"");
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static private bool checkAndCreateShortcut()
+        {
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            String shortcutFn = deskDir + "\\" + "车到发票辅助打印工具" + ".url";
+            if (!File.Exists(shortcutFn))
+            {
+                using (StreamWriter writer = new StreamWriter(shortcutFn))
+                {
+                    string app = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                    writer.WriteLine("[InternetShortcut]");
+                    writer.WriteLine("URL=file:///" + app);
+                    writer.WriteLine("IconIndex=0");
+                    string icon = app.Replace('\\', '/');
+                    writer.WriteLine("IconFile=" + icon);
+                    writer.Flush();
+                }
+                return true;
+            }
+            return false;
+        }
+
     }
 }
